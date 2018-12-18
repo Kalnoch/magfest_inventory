@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tournament Detail</title>
+</head>
+<body>
+<h1>{{ tournament.name }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<ul>
+    <li>Max number of players: {{ tournament.max_players }}</li>
+    <li>Current number of players: {{ tournament.tournamentplayer_set.count }}</li>
+</ul>
+
+<form action="/items/tournaments/{{tournament.id}}/signup" method="post">
+    {% csrf_token %}
+    <label for="barcode">Barcode: </label>
+    <input id="barcode" type="text" name="barcode">
+    <input type="submit" value="OK">
+</form>
+
+</body>
+</html>

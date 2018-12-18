@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tournament Index</title>
+</head>
+<body>
+{% if tournament_list %}
+    <ul>
+    {% for tournament in tournament_list %}
+        <li><a href="{{ tournament.id }}/">{{ tournament.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No tournaments are available.</p>
+{% endif %}
+</body>
+</html>
+</html>
