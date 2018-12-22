@@ -3,9 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Tournament Players</title>
+    <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
 <body>
+<div class="breadcrumbs">
+    <a href="/items/tournaments">Tournaments</a>
+    ->
+    <a href="/items/tournaments/{{tournament.id}}">{{tournament.name}}</a>
+    -> Player List
+</div>
 {% if players_list %}
+    <div><a href="shuffle">Shuffle</a></div>
     <ul>
     {% for player in players_list %}
         <div>{{ player }}</div>

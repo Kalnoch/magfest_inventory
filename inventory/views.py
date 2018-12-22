@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from django.template import loader
 from django.urls import reverse
 from django.views import generic
+from django.utils.timezone import now
 from .tournaments import Tournaments
 
 from .models import Item, Tournament, TournamentPlayer
@@ -65,6 +66,11 @@ def tournament_index(request):
     return HttpResponse(template.render(context, request))
 
 
+def open_tournament(request):
+    tournament_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now()).order_by('-start_time')
+    return render(request, 'inventory/tournaments_index.html', {'tournament_list': tournament_list})
+
+
 def tournament_detail(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
     return render(request, 'inventory/tournament_detail.html', {'tournament': tournament})
@@ -83,11 +89,13 @@ def tournament_signup(request, tournament_id):
 def tournament_player_list(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
     player_list = tournament.players.all()
-    return render(request, 'inventory/tournament_players.html', {'players_list': player_list})
+    return render(request, 'inventory/tournament_players.html', {'tournament': tournament,
+                                                                 'players_list': player_list})
 
 
 def tournament_player_list_shuffled(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
     player_list = list(tournament.players.all())
     shuffle(player_list)
-    return render(request, 'inventory/tournament_players.html', {'players_list': player_list})
+    return render(request, 'inventory/tournament_players.html', {'tournament': tournament,
+                                                                 'players_list': player_list})
