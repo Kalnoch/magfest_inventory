@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tournament Players</title>
+</head>
+<body>
+{% if players_list %}
+    <ul>
+    {% for player in players_list %}
+        <div>{{ player }}</div>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No players currently signed up for this tournament.</p>
+{% endif %}
+</body>
+</html>
+</html>

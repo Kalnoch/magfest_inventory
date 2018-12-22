@@ -7,6 +7,8 @@ from .tournaments import Tournaments
 
 from .models import Item, Tournament, TournamentPlayer
 
+from random import shuffle
+
 
 # Create your views here.
 def index(request):
@@ -76,3 +78,16 @@ def tournament_signup(request, tournament_id):
                                                                     'error_message': "You have successfully signed up"})
     return render(request, 'inventory/tournament_detail.html', {'tournament': tournament,
                                                                 'error_message': "Signup unsuccessful, sorry, it might be full"})
+
+
+def tournament_player_list(request, tournament_id):
+    tournament = get_object_or_404(Tournament, pk=tournament_id)
+    player_list = tournament.players.all()
+    return render(request, 'inventory/tournament_players.html', {'players_list': player_list})
+
+
+def tournament_player_list_shuffled(request, tournament_id):
+    tournament = get_object_or_404(Tournament, pk=tournament_id)
+    player_list = list(tournament.players.all())
+    shuffle(player_list)
+    return render(request, 'inventory/tournament_players.html', {'players_list': player_list})

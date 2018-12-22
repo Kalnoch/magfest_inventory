@@ -14,8 +14,8 @@ class Tournaments:
                                                                      last_name=r['result']['last_name'],
                                                                      badge_number=r['result']['badge_num'])
 
-            if tournament.tournamentplayer_set.count() < tournament.max_players:
-                tournament.tournamentplayer_set.add(player)
+            if tournament.players.count() < tournament.max_players:
+                tournament.players.add(player)
                 return True
             else:
                 return False

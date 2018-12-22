@@ -36,11 +36,17 @@ class Tournament(models.Model):
     start_time = models.DateTimeField()  # When the tournament starts
     open_time = models.DateTimeField()  # When signup opens for the tournament
     m_points = models.IntegerField()  # Number of m-points associated with a tournament
+    players = models.ManyToManyField('TournamentPlayer')
     # kind_of_bracket
+
+    def __str__(self):
+        return self.name
 
 
 class TournamentPlayer(models.Model):
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
     badge_number = models.CharField(max_length=7)
-    tournaments = models.ManyToManyField(Tournament)
+
+    def __str__(self):
+        return " ".join([self.first_name, self.last_name])

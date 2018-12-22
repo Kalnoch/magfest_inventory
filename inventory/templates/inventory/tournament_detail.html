@@ -10,8 +10,8 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <ul>
-    <li>Max number of players: {{ tournament.max_players }}</li>
-    <li>Current number of players: {{ tournament.tournamentplayer_set.count }}</li>
+    <div>Max number of players: {{ tournament.max_players }}</div>
+    <div>Current number of players: {{ tournament.players.count }}</div>
 </ul>
 
 <form action="/items/tournaments/{{tournament.id}}/signup" method="post">
