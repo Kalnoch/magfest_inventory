@@ -107,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'EST'
 
 USE_I18N = True
 
@@ -121,6 +121,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-UBER_AUTH_TOKEN = '5d3d2068-d86f-40ae-8c32-66ee823f6288'
+# Test Uber Token
+# UBER_AUTH_TOKEN = '5d3d2068-d86f-40ae-8c32-66ee823f6288'
+# Prod Uber Token
+UBER_AUTH_TOKEN = 'cdc11f3c-4136-40d9-9975-8b2b539fd8ad'
 
 django.setup()

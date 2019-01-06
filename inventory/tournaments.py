@@ -1,5 +1,6 @@
 from inventory.reggie_interface import ReggieInterface
 from inventory.models import TournamentPlayer, Tournament
+from django.utils.timezone import now
 
 
 class Tournaments:
@@ -14,7 +15,7 @@ class Tournaments:
                                                                      last_name=r['result']['last_name'],
                                                                      badge_number=r['result']['badge_num'])
 
-            if tournament.players.count() < tournament.max_players:
+            if tournament.players.count() < tournament.max_players and now() > tournament.open_time:
                 tournament.players.add(player)
                 return True
             else:

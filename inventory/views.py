@@ -4,6 +4,7 @@ from django.template import loader
 from django.urls import reverse
 from django.views import generic
 from django.utils.timezone import now
+from django.db.models import F, Count
 from .tournaments import Tournaments
 
 from .models import Item, Tournament, TournamentPlayer
@@ -60,14 +61,14 @@ def games_checked_out(request):
 
 
 def tournament_index(request):
-    tournament_list = Tournament.objects.order_by('-start_time')
+    tournament_list = Tournament.objects.order_by('start_time')
     template = loader.get_template('inventory/tournaments_index.html')
     context = {'tournament_list': tournament_list}
     return HttpResponse(template.render(context, request))
 
 
 def open_tournament(request):
-    tournament_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now()).order_by('-start_time')
+    tournament_list = Tournament.objects.annotate(count=Count('players')).filter(open_time__lte=now(), start_time__gt=now()).exclude(max_players=F('count')).order_by('start_time')
     return render(request, 'inventory/tournaments_index.html', {'tournament_list': tournament_list})
 
 
@@ -79,9 +80,11 @@ def tournament_detail(request, tournament_id):
 def tournament_signup(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
     t = Tournaments()
+    tournament_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now()).order_by('start_time')
     if t.sign_up(tournament, request.POST['barcode']):
         return render(request, 'inventory/tournament_detail.html', {'tournament': tournament,
-                                                                    'error_message': "You have successfully signed up"})
+                                                                   'error_message': "You have successfully signed up"})
+        # return render(request, 'inventory/tournaments_index.html', {'tournament_list': tournament_list})
     return render(request, 'inventory/tournament_detail.html', {'tournament': tournament,
                                                                 'error_message': "Signup unsuccessful, sorry, it might be full"})
 

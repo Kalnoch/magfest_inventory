@@ -22,7 +22,7 @@
 <form action="/items/tournaments/{{tournament.id}}/signup" method="post">
     {% csrf_token %}
     <label for="barcode">Barcode: </label>
-    <input id="barcode" type="text" name="barcode">
+    <input id="barcode" type="text" name="barcode" autofocus="autofocus">
     <input type="submit" value="OK">
 </form>
 

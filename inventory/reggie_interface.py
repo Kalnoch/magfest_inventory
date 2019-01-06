@@ -13,7 +13,10 @@ class ReggieInterface:
     def __init__(self):
         self.session = requests.Session()
         self.session.headers.update({'X-Auth-Token': UBER_AUTH_TOKEN})
-        self.BASE_URL = 'https://staging-reggie.magfest.org/jsonrpc/'
+        # Test URL
+        # self.BASE_URL = 'https://staging-reggie.magfest.org/jsonrpc/'
+        # Prod URL
+        self.BASE_URL = 'https://onsite.uber.magfest.org/jsonrpc/'
 
     def lookup_attendee_from_barcode(self, barcode):
         payload = json.dumps({"method": "barcode.lookup_attendee_from_barcode", "params": [barcode]})

@@ -31,12 +31,12 @@ class Peripheral(models.Model):
 
 
 class Tournament(models.Model):
-    name = models.CharField(max_length=32)  # Name of tournament
+    name = models.CharField(max_length=64)  # Name of tournament
     max_players = models.IntegerField()  # Max number of players in the tournament
     start_time = models.DateTimeField()  # When the tournament starts
     open_time = models.DateTimeField()  # When signup opens for the tournament
     m_points = models.IntegerField()  # Number of m-points associated with a tournament
-    players = models.ManyToManyField('TournamentPlayer')
+    players = models.ManyToManyField('TournamentPlayer', blank=True)
     # kind_of_bracket
 
     def __str__(self):

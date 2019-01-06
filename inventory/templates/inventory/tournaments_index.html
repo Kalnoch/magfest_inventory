@@ -15,6 +15,7 @@
         <tr>
             <th>Tournament Name</th>
             <th>Max Players</th>
+            <th>Current Players</th>
             <th>Start Time</th>
             <th>Open Time</th>
         </tr>
@@ -22,6 +23,7 @@
         <tr>
             <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
             <td>{{ tournament.max_players }}</td>
+            <td>{{ tournament.players.count }}</td>
             <td>{{ tournament.start_time }}</td>
             <td>{{ tournament.open_time }}</td>
         </tr>
