@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Player Info</title>
+    <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
+</head>
+<body>
+<div class="breadcrumbs">
+    <a href="/">Main Menu</a>
+    </div>
+
+<h1> Please scan badge now </h1>
+
+<form action="/player_detail" method="post">
+    {% csrf_token %}
+    <label for="barcode">Barcode: </label>
+    <input id="barcode" type="text" name="barcode" autofocus="autofocus">
+    <input type="submit" value="OK">
+</form>
+
+</body>
+</html>

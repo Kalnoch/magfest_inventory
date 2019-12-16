@@ -2,38 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tournament Index</title>
+    <title>Player Detail</title>
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
 <body>
 <div class="breadcrumbs">
-    <a href="/"> Main Menu </a> ->
-    <a href="/tournaments">Tournaments</a> ->
-    <a href="all">All</a>
-</div>
-<h1> If you don't see the tournament you're looking for, it may not be open yet. Check back later. Ya hooligan! </h1>
+    <a href="/">Main Menu</a>
+    -> {{ player.first_name }}
+    </div>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
 {% if tournament_list %}
     <table style="width:100%">
         <tr>
             <th>Tournament Name</th>
-            <th>Max Players</th>
             <th>Current Players</th>
             <th>Start Time</th>
-            <th>Open Time</th>
         </tr>
     {% for tournament in tournament_list %}
         <tr>
             <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
-            <td>{{ tournament.max_players }}</td>
             <td>{{ tournament.players.count }}</td>
             <td>{{ tournament.start_time }}</td>
-            <td>{{ tournament.open_time }}</td>
         </tr>
     {% endfor %}
     </table>
 {% else %}
-    <p>No tournaments are available.</p>
+    <h1 style="font-size:25pt; text-align: center">You are not signed up for any tournaments.</h1>
 {% endif %}
 </body>
-</html>
 </html>

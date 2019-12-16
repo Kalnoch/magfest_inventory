@@ -1,13 +1,13 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.template import loader
-from django.urls import reverse
-from django.views import generic
 from django.utils.timezone import now
 from django.db.models import F, Count
+from django.core.exceptions import ObjectDoesNotExist
 from .tournaments import Tournaments
 
 from .models import Item, Tournament, TournamentPlayer
+from inventory.reggie_interface import ReggieInterface
 
 from random import shuffle
 
@@ -60,6 +60,10 @@ def games_checked_out(request):
 #     return HttpResponse(output)
 
 
+def tournament_main_page(request):
+    return render(request, 'inventory/tournament_main_page.html')
+
+
 def tournament_index(request):
     tournament_list = Tournament.objects.order_by('start_time')
     template = loader.get_template('inventory/tournaments_index.html')
@@ -102,3 +106,22 @@ def tournament_player_list_shuffled(request, tournament_id):
     shuffle(player_list)
     return render(request, 'inventory/tournament_players.html', {'tournament': tournament,
                                                                  'players_list': player_list})
+
+
+def player_info(request):
+    return render(request, 'inventory/player.html')
+
+
+def get_player_detail(request):
+    reggie = ReggieInterface()
+    r = reggie.lookup_attendee_from_barcode(request.POST['barcode'])
+    if r is not None:
+        try:
+            player = TournamentPlayer.objects.get(badge_number=r['result']['badge_num'])
+            tournament_list = Tournament.objects.filter(players__id=player.id)
+
+            return render(request, 'inventory/player_detail.html', {'player': player,
+                                                                    'tournament_list': tournament_list})
+        except ObjectDoesNotExist:
+            pass
+    return render(request, 'inventory/player_detail.html')

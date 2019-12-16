@@ -1,5 +1,5 @@
 from inventory.reggie_interface import ReggieInterface
-from inventory.models import TournamentPlayer, Tournament
+from inventory.models import TournamentPlayer
 from django.utils.timezone import now
 
 
