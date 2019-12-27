@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" http-equiv="refresh" content="4; url = /">
+    <title>Tournament Signup</title>
+    <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
+</head>
+{%  load static %}
+<body style="background-image: url('{%  static "inventory/images/Repeated_Wallpaper_Light.png" %}');">
+<div class="breadcrumbs">
+    <a href="/">Main Menu</a>->
+    <a href="/tournaments">Tournaments</a>
+    -> {{ tournament.name }}
+    </div>
+<h1 style="text-align: center">{{ tournament.name }}</h1>
+{% if error_message %}<p style="text-align: center; font-size: 36px" ><strong>{{ error_message }}</strong></p>{% endif %}
+</body>
+</html>

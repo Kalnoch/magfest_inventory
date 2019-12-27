@@ -5,7 +5,8 @@
     <title>Player Detail</title>
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
-<body>
+{%  load static %}
+<body style="background-image: url('{%  static "inventory/images/Repeated_Wallpaper_Light.png" %}');">
 <div class="breadcrumbs">
     <a href="/">Main Menu</a>
     -> {{ player.first_name }}
@@ -14,17 +15,25 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 {% if tournament_list %}
-    <table style="width:100%">
+    <table style="width:100%; background-color: white">
         <tr>
             <th>Tournament Name</th>
             <th>Current Players</th>
             <th>Start Time</th>
+            <th>Drop tournament?</th>
         </tr>
     {% for tournament in tournament_list %}
         <tr>
-            <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
+            <td>{{ tournament.name }}</td>
             <td>{{ tournament.players.count }}</td>
             <td>{{ tournament.start_time }}</td>
+            <td>
+                <form action="player_detail/remove" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="tournament" value={{ tournament.id }}>
+                    <input type="hidden" name="player" value={{ player.id }}>
+                    <button type="submit">&#x2716;</button>
+                </form></td>
         </tr>
     {% endfor %}
     </table>

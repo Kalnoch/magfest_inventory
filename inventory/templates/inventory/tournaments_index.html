@@ -5,15 +5,16 @@
     <title>Tournament Index</title>
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
-<body>
+{%  load static %}
+<body style="background-image: url('{%  static "inventory/images/Repeated_Wallpaper_Light.png" %}');">
 <div class="breadcrumbs">
     <a href="/"> Main Menu </a> ->
     <a href="/tournaments">Tournaments</a> ->
     <a href="all">All</a>
 </div>
-<h1> If you don't see the tournament you're looking for, it may not be open yet. Check back later. Ya hooligan! </h1>
+<h1 style="text-align: center"> If you don't see the tournament you're looking for, it may not be open yet. Check back later. Ya hooligan! </h1>
 {% if tournament_list %}
-    <table style="width:100%">
+    <table style="width:100%; background-color: white">
         <tr>
             <th>Tournament Name</th>
             <th>Max Players</th>
@@ -32,7 +33,7 @@
     {% endfor %}
     </table>
 {% else %}
-    <p>No tournaments are available.</p>
+    <p style="text-align: center">No tournaments are available.</p>
 {% endif %}
 </body>
 </html>

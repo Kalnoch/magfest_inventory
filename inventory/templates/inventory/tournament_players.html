@@ -5,11 +5,12 @@
     <title>Tournament Players</title>
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
-<body>
+{%  load static %}
+<body style="background-image: url('{%  static "inventory/images/Repeated_Wallpaper_Light.png" %}');">
 <div class="breadcrumbs">
-    <a href="/items/tournaments">Tournaments</a>
+    <a href="/tournaments">Tournaments</a>
     ->
-    <a href="/items/tournaments/{{tournament.id}}">{{tournament.name}}</a>
+    <a href="/tournaments/{{tournament.id}}">{{tournament.name}}</a>
     -> Player List
 </div>
 <h1> Don't forget to shuffle the player list before printing</h1>

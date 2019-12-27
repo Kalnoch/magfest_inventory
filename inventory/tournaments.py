@@ -9,6 +9,7 @@ class Tournaments:
         self.reggie = ReggieInterface()
 
     def sign_up(self, tournament, barcode):
+        # Takes a barcode and signs up the given player
         r = self.reggie.lookup_attendee_from_barcode(barcode)
         if r is not None:
             player, created = TournamentPlayer.objects.get_or_create(first_name=r['result']['first_name'],
@@ -20,3 +21,9 @@ class Tournaments:
                 return True
             else:
                 return False
+
+    @staticmethod
+    def remove_from_tournament(self, tournament, player):
+        # Takes a given tournament and player and removes the player from the tournament
+        # Does not throw any errors if the player is not in the tournament
+        tournament.players.remove(player)

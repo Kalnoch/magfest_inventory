@@ -5,14 +5,15 @@
     <title>Tournament Detail</title>
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
-<body>
+{%  load static %}
+<body style="background-image: url('{%  static "inventory/images/Repeated_Wallpaper_Light.png" %}');">
 <div class="breadcrumbs">
     <a href="/">Main Menu</a>->
     <a href="/tournaments">Tournaments</a>
     -> {{ tournament.name }}
     </div>
-<h1>{{ tournament.name }}</h1>
-<h2> Please scan badge now </h2>
+<h1 style="text-align: center">{{ tournament.name }}</h1>
+<h2 style="text-align: center"> Please scan badge now </h2>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
@@ -20,13 +21,14 @@
 {#    <div>Max number of players: {{ tournament.max_players }}</div>#}
 {#    <div>Current number of players: <a href="player_list">{{ tournament.players.count }}</a></div>#}
 {#</ul>#}
-
-<form action="/tournaments/{{tournament.id}}/signup" method="post">
-    {% csrf_token %}
-    <label for="barcode">Barcode: </label>
-    <input id="barcode" type="text" name="barcode" autofocus="autofocus">
-    <input type="submit" value="OK">
-</form>
+<div style="text-align: center">
+    <form action="/tournaments/{{tournament.id}}/signup" method="post">
+        {% csrf_token %}
+        <label for="barcode">Barcode: </label>
+        <input id="barcode" type="text" name="barcode" autofocus="autofocus">
+        <input type="submit" value="OK">
+    </form>
+</div>
 
 </body>
 </html>

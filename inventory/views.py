@@ -4,12 +4,21 @@ from django.template import loader
 from django.utils.timezone import now
 from django.db.models import F, Count
 from django.core.exceptions import ObjectDoesNotExist
+from random import choice
 from .tournaments import Tournaments
 
 from .models import Item, Tournament, TournamentPlayer
 from inventory.reggie_interface import ReggieInterface
 
 from random import shuffle
+
+
+def generate_shakespearean_insult():
+    one = ['artless', 'bawdy', 'beslubbering', 'bootless', 'churlish', 'cockered', 'clouted', 'craven', 'currish', 'dankish' ,'dissembling', 'droning', 'errant', 'fawning', 'fobbing', 'froward', 'frothy', 'gleeking', 'goatish', 'gorbellied', 'impertinent', 'infectious', 'jarring', 'loggerheaded', 'lumpish', 'mammering', 'mangled']
+    two = ['base-court', 'bat-fowling', 'beef-witted', 'beetle-headed', 'boil-brained', 'clapper-clawed', 'clay-brained', 'common-kissing', 'crook-pated', 'dismal-dreaming', 'dizzy-eyed', 'doghearted', 'dread-bolted', 'earth-vexing', 'elf-skinned', 'fat-kidneyed', 'fen-sucked', 'flap-mouthed', 'fly-bitten', 'folly-fallen', 'fool-born', 'full-gorged', 'guts-griping', 'half-faced', 'hasty-witted', 'hedge-born', 'hell-hated']
+    three = ['apple-john', 'baggage', 'barnacle', 'bladder', 'boar-pig', 'bugbear', 'bum-bailey', 'canker-blossom', 'clack-dish', 'clotpole', 'coxcomb', 'codpiece', 'death-token', 'dewberry', 'flap-dragon', 'flax-wench', 'flirt-gill', 'foot-licker', 'fustilarian', 'giglet', 'gudgeon', 'haggard', 'harpy', 'hedge-pig', 'horn-beast', 'hugger-mugger', 'joithead']
+
+    return " ".join(["Thou", choice(one), choice(two), choice(three)])
 
 
 # Create your views here.
@@ -86,10 +95,10 @@ def tournament_signup(request, tournament_id):
     t = Tournaments()
     tournament_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now()).order_by('start_time')
     if t.sign_up(tournament, request.POST['barcode']):
-        return render(request, 'inventory/tournament_detail.html', {'tournament': tournament,
-                                                                   'error_message': "You have successfully signed up"})
+        return render(request, 'inventory/tournament_signup.html', {'tournament': tournament,
+                                                                    'error_message': "You have successfully signed up"})
         # return render(request, 'inventory/tournaments_index.html', {'tournament_list': tournament_list})
-    return render(request, 'inventory/tournament_detail.html', {'tournament': tournament,
+    return render(request, 'inventory/tournament_signup.html', {'tournament': tournament,
                                                                 'error_message': "Signup unsuccessful, sorry, it might be full"})
 
 
@@ -125,3 +134,12 @@ def get_player_detail(request):
         except ObjectDoesNotExist:
             pass
     return render(request, 'inventory/player_detail.html')
+
+
+def remove_player_from_tournament(request):
+    player = TournamentPlayer.objects.get(id=request.POST['player'])
+    tournament = Tournament.objects.get(id=request.POST['tournament'])
+    Tournaments.remove_from_tournament(Tournaments, tournament, player)
+    tournament_list = Tournament.objects.filter(players__id=player.id)
+    return render(request, 'inventory/player_detail.html', {'player': player,
+                                                            'tournament_list': tournament_list})

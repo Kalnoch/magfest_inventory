@@ -5,19 +5,22 @@
     <title>Player Info</title>
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
-<body>
+{%  load static %}
+<body style="background-image: url('{%  static "inventory/images/Repeated_Wallpaper_Light.png" %}');">
 <div class="breadcrumbs">
     <a href="/">Main Menu</a>
     </div>
 
-<h1> Please scan badge now </h1>
+<h1 style="text-align: center"> Please scan badge now </h1>
 
-<form action="/player_detail" method="post">
-    {% csrf_token %}
-    <label for="barcode">Barcode: </label>
-    <input id="barcode" type="text" name="barcode" autofocus="autofocus">
-    <input type="submit" value="OK">
-</form>
+<div style="text-align: center">
+    <form action="/player_detail" method="post">
+        {% csrf_token %}
+        <label for="barcode">Barcode: </label>
+        <input id="barcode" type="text" name="barcode" autofocus="autofocus">
+        <input type="submit" value="OK">
+    </form>
+</div>
 
 </body>
 </html>
