@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tournament Details</title>
+    <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
+</head>
+<body>
+<div class="breadcrumbs">
+    <a href="/runners">Main Menu</a>
+    -> {{ tournament.name }}
+    </div>
+<h1 style="text-align: center">{{ tournament.name }}</h1>
+
+<h1 style="text-align: center"> Don't forget to shuffle the player list before printing</h1>
+<h2 style="text-align: center"> The payout for this tournament will be x/y/z </h2>
+{% if players_list %}
+    <div style="text-align: center"><a href="print" target="_blank">Print!</a></div>
+
+    {% for player in players_list %}
+        <div style="text-align: center">{{ player }}</div>
+    {% endfor %}
+
+{% else %}
+    <p>No players currently signed up for this tournament.</p>
+{% endif %}
+</body>
+</html>

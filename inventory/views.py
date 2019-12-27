@@ -102,6 +102,28 @@ def tournament_signup(request, tournament_id):
                                                                 'error_message': "Signup unsuccessful, sorry, it might be full"})
 
 
+def runner_index(request):
+    tournament_list = Tournament.objects.order_by('start_time')
+    return render(request, 'inventory/tournament_runners.html', {'tournament_list': tournament_list})
+
+
+def runner_detail(request, tournament_id):
+    tournament = get_object_or_404(Tournament, pk=tournament_id)
+    player_list = tournament.players.all()
+    return render(request, 'inventory/runner_detail.html', {'tournament': tournament,
+                                                            'players_list': player_list})
+
+
+def runner_print(request, tournament_id):
+    tournament = get_object_or_404(Tournament, pk=tournament_id)
+    tournament.printed = True
+    tournament.save()
+    player_list = list(tournament.players.all())
+    shuffle(player_list)
+    return render(request, 'inventory/runner_print.html', {'tournament': tournament,
+                                                           'players_list': player_list})
+
+
 def tournament_player_list(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
     player_list = tournament.players.all()

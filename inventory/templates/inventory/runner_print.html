@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ tournament.name }} Player List</title>
+</head>
+<body>
+{% for player in players_list %}
+    <div style="text-align: center; font-size: 20px">{{ player }}</div>
+{% endfor %}
+</body>
+</html>

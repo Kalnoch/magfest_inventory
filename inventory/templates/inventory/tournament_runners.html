@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tournament Runners Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
+</head>
+<body>
+<div class="breadcrumbs">
+    <a href="/runners"> Main Menu </a>
+</div>
+<table style="width:100%; background-color: white">
+    <tr>
+        <th>Tournament Name</th>
+        <th>Max Players</th>
+        <th>Current Players</th>
+        <th>Start Time</th>
+        <th>Open Time</th>
+        <th>Printed?</th>
+    </tr>
+{% for tournament in tournament_list %}
+    <tr>
+        <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
+        <td>{{ tournament.max_players }}</td>
+        <td>{{ tournament.players.count }}</td>
+        <td>{{ tournament.start_time }}</td>
+        <td>{{ tournament.open_time }}</td>
+        <td>{{ tournament.printed }}</td>
+    </tr>
+{% endfor %}
+</table>
+</body>
+</html>
