@@ -26,7 +26,7 @@ SECRET_KEY = 'jbx46-_0)gz=%(n0qyrw0(y%o-twkumgaka^p4+o$@tkmqtuox'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.102.10.7']
 
 
 # Application definition
@@ -123,8 +123,8 @@ STATIC_URL = '/static/'
 
 # Test Uber Token
 # UBER_AUTH_TOKEN = '5d3d2068-d86f-40ae-8c32-66ee823f6288'
-UBER_AUTH_TOKEN = '5d232ad6-adc2-4f2a-aa37-9399bd0c0822'
+# UBER_AUTH_TOKEN = '5d232ad6-adc2-4f2a-aa37-9399bd0c0822'
 # Prod Uber Token
-# UBER_AUTH_TOKEN = 'cdc11f3c-4136-40d9-9975-8b2b539fd8ad'
+UBER_AUTH_TOKEN = '506ab59d-26da-4d6a-afff-2bf9c7e0aaeb'
 
 django.setup()
