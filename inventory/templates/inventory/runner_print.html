@@ -5,6 +5,7 @@
     <title>{{ tournament.name }} Player List</title>
 </head>
 <body>
+<div style="text-align: center; font-size: 30px;">The M-Points for this tournament are: {{ tournament.m_points }}</div>
 {% for player in players_list %}
     <div style="text-align: center; font-size: 20px">{{ player }}</div>
 {% endfor %}

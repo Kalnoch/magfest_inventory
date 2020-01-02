@@ -109,6 +109,7 @@ def runner_index(request):
 
 def runner_detail(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
+    tournament.m_points = Tournaments.determine_m_points(Tournaments, tournament)
     player_list = tournament.players.all()
     return render(request, 'inventory/runner_detail.html', {'tournament': tournament,
                                                             'players_list': player_list})
@@ -116,6 +117,7 @@ def runner_detail(request, tournament_id):
 
 def runner_print(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
+    tournament.m_points = Tournaments.determine_m_points(Tournaments, tournament)
     tournament.printed = True
     tournament.save()
     player_list = list(tournament.players.all())

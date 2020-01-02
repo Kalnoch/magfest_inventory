@@ -35,7 +35,7 @@ class Tournament(models.Model):
     max_players = models.IntegerField()  # Max number of players in the tournament
     start_time = models.DateTimeField()  # When the tournament starts
     open_time = models.DateTimeField()  # When signup opens for the tournament
-    m_points = models.IntegerField()  # Number of m-points associated with a tournament
+    m_points = models.CharField(max_length=25, blank=True)  # Number of m-points associated with a tournament
     players = models.ManyToManyField('TournamentPlayer', blank=True)
     printed = models.BooleanField(default=False)  # Whether the tournament bracket has been printed
     # kind_of_bracket
