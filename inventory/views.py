@@ -75,7 +75,7 @@ def tournament_main_page(request):
 
 def tournament_index(request):
     tournament_list = Tournament.objects.order_by('start_time')
-    template = loader.get_template('inventory/tournaments_index.html')
+    template = loader.get_template('inventory/tournaments_index_all.html')
     context = {'tournament_list': tournament_list}
     return HttpResponse(template.render(context, request))
 

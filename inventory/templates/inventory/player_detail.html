@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" http-equiv="refresh" content="15; url = /">
     <title>Player Detail</title>
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
@@ -28,7 +28,7 @@
             <td>{{ tournament.players.count }}</td>
             <td>{{ tournament.start_time }}</td>
             <td>
-                <form action="player_detail/remove" method="post">
+                <form action="/player_detail/remove" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="tournament" value={{ tournament.id }}>
                     <input type="hidden" name="player" value={{ player.id }}>
