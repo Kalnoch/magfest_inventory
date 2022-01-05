@@ -13,12 +13,12 @@
 <h1 style="text-align: center">{{ tournament.name }}</h1>
 
 <h1 style="text-align: center"> Don't forget to shuffle the player list before printing</h1>
-<h2 style="text-align: center"> The payout for this tournament will be x/y/z </h2>
+<h2 style="text-align: center"> The payout for this tournament will be {{ tournament.m_points }} </h2>
 {% if players_list %}
-    <div style="text-align: center"><a href="print" target="_blank">Print!</a></div>
+    <div style="text-align: center; font-size: 20px"><a href="print" target="_blank">Print!</a></div>
 
     {% for player in players_list %}
-        <div style="text-align: center">{{ player }}</div>
+        <div style="text-align: center; font-size: 18px">{{ player }}</div>
     {% endfor %}
 
 {% else %}

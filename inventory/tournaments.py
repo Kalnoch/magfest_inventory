@@ -27,3 +27,53 @@ class Tournaments:
         # Takes a given tournament and player and removes the player from the tournament
         # Does not throw any errors if the player is not in the tournament
         tournament.players.remove(player)
+
+    @staticmethod
+    def determine_m_points(self, tournament):
+        # Takes a given tournament and sets the number of m-points
+        # Run at print time of tournament?
+        payout_1 = (5, 0, 0, 0)
+        payout_2 = (5, 3, 1, 0)
+        payout_3 = (6, 3, 1, 0)
+        payout_4 = (7, 3, 2, 0)
+        payout_5 = (8, 4, 2, 0)
+        payout_6 = (10, 4, 2, 0)
+        payout_7 = (10, 4, 2, 1)
+        payout_8 = (15, 5, 3, 1)
+        payout_9 = (17, 8, 4, 1)
+        m_point_bracket = {4: payout_1,
+                           5: payout_1,
+                           6: payout_1,
+                           7: payout_1,
+                           8: payout_2,
+                           9: payout_3,
+                           10: payout_3,
+                           11: payout_3,
+                           12: payout_3,
+                           13: payout_3,
+                           14: payout_3,
+                           15: payout_3,
+                           16: payout_3,
+                           17: payout_4,
+                           18: payout_4,
+                           19: payout_4,
+                           20: payout_4,
+                           21: payout_4,
+                           22: payout_4,
+                           23: payout_5,
+                           24: payout_5,
+                           25: payout_5,
+                           26: payout_5,
+                           27: payout_6,
+                           28: payout_6,
+                           29: payout_7,
+                           30: payout_8,
+                           31: payout_8,
+                           32: payout_9
+                           }
+        p_count = tournament.players.count()
+        if p_count in m_point_bracket:
+            m_points = m_point_bracket[p_count]
+            return m_points
+        else:
+            return 0
