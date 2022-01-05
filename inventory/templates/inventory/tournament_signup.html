@@ -6,13 +6,13 @@
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
 {%  load static %}
-<body style="background-image: url('{%  static "inventory/images/Repeated_Wallpaper_Light.png" %}');">
+<body style="background-image: url('{%  static "inventory/images/Super_2022_Background.png" %}');">
 <div class="breadcrumbs">
     <a href="/">Main Menu</a>->
     <a href="/tournaments">Tournaments</a>
     -> {{ tournament.name }}
     </div>
-<h1 style="text-align: center">{{ tournament.name }}</h1>
-{% if error_message %}<p style="text-align: center; font-size: 36px" ><strong>{{ error_message }}</strong></p>{% endif %}
+<h1 style="text-align: center; color: white">{{ tournament.name }}</h1>
+{% if error_message %}<p style="text-align: center; font-size: 36px; color: white" ><strong>{{ error_message }}</strong></p>{% endif %}
 </body>
 </html>

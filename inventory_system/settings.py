@@ -123,8 +123,9 @@ STATIC_URL = '/static/'
 
 # Test Uber Token
 # UBER_AUTH_TOKEN = '5d3d2068-d86f-40ae-8c32-66ee823f6288'
-UBER_AUTH_TOKEN = '5d232ad6-adc2-4f2a-aa37-9399bd0c0822'
+# UBER_AUTH_TOKEN = '5d232ad6-adc2-4f2a-aa37-9399bd0c0822'
+UBER_AUTH_TOKEN = '46a2abe0-ccc6-4e37-8f17-e4477eedc7ef'
 # Prod Uber Token
-# UBER_AUTH_TOKEN = 'cdc11f3c-4136-40d9-9975-8b2b539fd8ad'
+# UBER_AUTH_TOKEN = '2e4309c3-ec28-4fac-a032-51c20879c8e8'
 
 django.setup()

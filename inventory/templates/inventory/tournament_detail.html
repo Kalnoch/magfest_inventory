@@ -6,14 +6,14 @@
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
 {%  load static %}
-<body style="background-image: url('{%  static "inventory/images/Repeated_Wallpaper_Light.png" %}');">
+<body style="background-image: url('{%  static "inventory/images/Super_2022_Background.png" %}');">
 <div class="breadcrumbs">
     <a href="/">Main Menu</a>->
     <a href="/tournaments">Tournaments</a>
     -> {{ tournament.name }}
     </div>
-<h1 style="text-align: center">{{ tournament.name }}</h1>
-<h2 style="text-align: center"> Please scan badge now </h2>
+<h1 style="text-align: center; color: white">{{ tournament.name }}</h1>
+<h2 style="text-align: center; color: white;"> Please scan badge now </h2>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
@@ -21,7 +21,7 @@
 {#    <div>Max number of players: {{ tournament.max_players }}</div>#}
 {#    <div>Current number of players: <a href="player_list">{{ tournament.players.count }}</a></div>#}
 {#</ul>#}
-<div style="text-align: center">
+<div style="text-align: center; color: white">
     <form action="/tournaments/{{tournament.id}}/signup" method="post">
         {% csrf_token %}
         <label for="barcode">Barcode: </label>
