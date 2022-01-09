@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 
 from .models import Item, Tournament, TournamentPlayer
@@ -9,7 +10,8 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 class TournamentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'max_players', 'start_time', 'open_time', 'm_points')
+    department = forms.ChoiceField(choices=(('A', 'Consoles'), ('B', 'Arcade')))
+    list_display = ('name', 'department', 'max_players', 'start_time', 'open_time', 'm_points')
 
 
 class TournamentPlayerAdmin(admin.ModelAdmin):

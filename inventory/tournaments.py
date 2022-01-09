@@ -40,7 +40,7 @@ class Tournaments:
         payout_6 = (10, 4, 2, 0)
         payout_7 = (10, 4, 2, 1)
         payout_8 = (15, 5, 3, 1)
-        payout_9 = (17, 8, 4, 1)
+        payout_9 = (20, 10, 5, 1)
         m_point_bracket = {4: payout_1,
                            5: payout_1,
                            6: payout_1,
@@ -71,9 +71,26 @@ class Tournaments:
                            31: payout_8,
                            32: payout_9
                            }
+        smash_pay_1 = (10, 6, 3, 1)
+        smash_pay_2 = (15, 6, 3, 1)
+        smash_pay_3 = (30, 20, 10, 5)
+        smash_bracket = {8: smash_pay_1,
+                         24: smash_pay_2,
+                         40: smash_pay_3
+                         }
         p_count = tournament.players.count()
-        if p_count in m_point_bracket:
-            m_points = m_point_bracket[p_count]
-            return m_points
+        if tournament.name.startswith("Smash"):
+            if p_count > 40:
+                return smash_pay_3
+            elif p_count > 24:
+                return smash_pay_2
+            elif p_count > 8:
+                return smash_pay_1
+            else:
+                return 0
         else:
-            return 0
+            if p_count in m_point_bracket:
+                m_points = m_point_bracket[p_count]
+                return m_points
+            else:
+                return 0

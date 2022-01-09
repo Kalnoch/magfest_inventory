@@ -31,7 +31,12 @@ class Peripheral(models.Model):
 
 
 class Tournament(models.Model):
+    DEPT_CHOICES = [
+        ("Consoles", "Consoles"),
+        ("Arcade", "Arcade")
+    ]
     name = models.CharField(max_length=64)  # Name of tournament
+    department = models.CharField(max_length=64, choices=DEPT_CHOICES) # Department running tournament
     max_players = models.IntegerField()  # Max number of players in the tournament
     start_time = models.DateTimeField()  # When the tournament starts
     open_time = models.DateTimeField()  # When signup opens for the tournament
