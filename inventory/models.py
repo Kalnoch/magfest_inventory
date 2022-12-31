@@ -33,7 +33,10 @@ class Peripheral(models.Model):
 class Tournament(models.Model):
     DEPT_CHOICES = [
         ("Consoles", "Consoles"),
-        ("Arcade", "Arcade")
+        ("Arcade", "Arcade"),
+        ("Indie-Arcade", "Indie-Arcade"),
+        ("MIVS", "MIVS"),
+        ("Large Tournament Collider", "LTC"),
     ]
     name = models.CharField(max_length=64)  # Name of tournament
     department = models.CharField(max_length=64, choices=DEPT_CHOICES) # Department running tournament
@@ -41,6 +44,9 @@ class Tournament(models.Model):
     start_time = models.DateTimeField()  # When the tournament starts
     open_time = models.DateTimeField()  # When signup opens for the tournament
     m_points = models.CharField(max_length=25, blank=True)  # Number of m-points associated with a tournament
+    custom_m_points = models.BooleanField(default=False)  # Does this tournament use custom m-point numbers
+    info_only_tournament = models.BooleanField(default=False)  # Is this tournament only for show
+    team_size = models.IntegerField(default=1)  # How many players are on a team
     players = models.ManyToManyField('TournamentPlayer', blank=True)
     printed = models.BooleanField(default=False)  # Whether the tournament bracket has been printed
     # kind_of_bracket
@@ -56,3 +62,7 @@ class TournamentPlayer(models.Model):
 
     def __str__(self):
         return " ".join([self.first_name, self.last_name])
+
+
+class TournamentTeam(models.Model):
+    pass

@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from django.template import loader
 from django.utils.timezone import now
 from django.db.models import F, Count
+from django.db.transaction import set_autocommit, commit, rollback
 from django.core.exceptions import ObjectDoesNotExist
 from random import choice
 from .tournaments import Tournaments
@@ -81,8 +82,10 @@ def tournament_index(request):
 
 
 def open_tournament(request):
-    tournament_list = Tournament.objects.annotate(count=Count('players')).filter(open_time__lte=now(), start_time__gt=now(), printed=False).exclude(max_players=F('count')).order_by('start_time')
-    return render(request, 'inventory/tournaments_index.html', {'tournament_list': tournament_list})
+    tournament_list = Tournament.objects.annotate(count=Count('players')).filter(open_time__lte=now(), start_time__gt=now(), printed=False).exclude(max_players=F('count')).exclude(info_only_tournament=True).order_by('start_time')
+    tournament_info_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now()).exclude(info_only_tournament=False).order_by('start_time')
+    return render(request, 'inventory/tournaments_index.html', {'tournament_list': tournament_list,
+                                                                'tournament_info_list': tournament_info_list})
 
 
 def tournament_detail(request, tournament_id):
@@ -90,16 +93,42 @@ def tournament_detail(request, tournament_id):
     return render(request, 'inventory/tournament_detail.html', {'tournament': tournament})
 
 
+def tournament_team_signup(request, tournament, t):
+    success = True
+    error_messages = []
+    for n in range(tournament.team_size):
+        s, m = t.sign_up(tournament, request.POST[f"barcode{n}"])
+        if not s:
+            success = False
+            error_messages.append(m)
+    if success:
+        commit()
+        return success, [f"All players signed up successfully for {tournament.name}"]
+    rollback()
+    error_messages.insert(0, "There was an error in signing up your team:")
+    return success, error_messages
+
+
 def tournament_signup(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
     t = Tournaments()
-    tournament_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now()).order_by('start_time')
-    if t.sign_up(tournament, request.POST['barcode']):
+    message = ""
+    message_array = []
+    #tournament_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now()).order_by('start_time')
+    if tournament.team_size > 1:
+        set_autocommit(False)
+        success, message_array = tournament_team_signup(request, tournament, t)
+        set_autocommit(True)
+    else:
+        success, message = t.sign_up(tournament, request.POST['barcode'])
+    if success:
         return render(request, 'inventory/tournament_signup.html', {'tournament': tournament,
-                                                                    'error_message': "You have successfully signed up"})
+                                                                    'error_message': message,
+                                                                    'error_message_array': message_array})
         # return render(request, 'inventory/tournaments_index.html', {'tournament_list': tournament_list})
     return render(request, 'inventory/tournament_signup.html', {'tournament': tournament,
-                                                                'error_message': "Signup unsuccessful, sorry, it might be full"})
+                                                                'error_message': message,
+                                                                'error_message_array': message_array})
 
 
 def runner_index(request):
@@ -109,7 +138,8 @@ def runner_index(request):
 
 def runner_detail(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
-    tournament.m_points = Tournaments.determine_m_points(Tournaments, tournament)
+    if not tournament.custom_m_points:
+        tournament.m_points = Tournaments.determine_m_points(Tournaments, tournament)
     player_list = tournament.players.all()
     return render(request, 'inventory/runner_detail.html', {'tournament': tournament,
                                                             'players_list': player_list})
@@ -117,7 +147,8 @@ def runner_detail(request, tournament_id):
 
 def runner_print(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
-    tournament.m_points = Tournaments.determine_m_points(Tournaments, tournament)
+    if not tournament.custom_m_points:
+        tournament.m_points = Tournaments.determine_m_points(Tournaments, tournament)
     tournament.printed = True
     tournament.save()
     player_list = list(tournament.players.all())

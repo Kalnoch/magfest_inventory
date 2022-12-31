@@ -34,6 +34,17 @@
             <td>{{ tournament.start_time }}</td>
         </tr>
     {% endfor %}
+    {% if tournament_info_list %}
+        {% for tournament in tournament_info_list %}
+        <tr>
+            <td>{{ tournament.name }}</td>
+            <td>{{ tournament.department }}</td>
+            <td>{{ tournament.max_players }}</td>
+            <td>Sign up is done at start</td>
+            <td>{{ tournament.start_time }}</td>
+        </tr>
+        {% endfor %}
+    {% endif %}
     </table>
 {% else %}
     <p style="text-align: center">No tournaments are available.</p>

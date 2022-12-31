@@ -16,11 +16,18 @@ class Tournaments:
                                                                      last_name=r['result']['last_name'],
                                                                      badge_number=r['result']['badge_num'])
 
-            if tournament.players.count() < tournament.max_players and now() > tournament.open_time:
-                tournament.players.add(player)
-                return True
-            else:
-                return False
+            if player.tournament_set.filter(pk=tournament.pk):
+                return True, f"You are already signed up for {tournament.name}"
+            if not tournament.players.count() < tournament.max_players:
+                return False, f"Sorry {tournament.name} is full"
+            if now() < tournament.open_time:
+                return False, f"Sorry, {tournament.name} has already started"
+            existing_signups = player.tournament_set.filter(start_time=tournament.start_time)
+            if existing_signups:
+                return False, f"Sorry, you are already signed up for {existing_signups[0].name} at that time"
+            tournament.players.add(player)
+            return True, f"Successfully signed up for {tournament.name}"
+        return False, f"Sorry, your badge didn't scan properly, please try again. If the problem persists, please go see registration"
 
     @staticmethod
     def remove_from_tournament(self, tournament, player):
