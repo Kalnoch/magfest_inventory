@@ -100,7 +100,7 @@ def tournament_team_signup(request, tournament, t):
         s, m = t.sign_up(tournament, request.POST[f"barcode{n}"])
         if not s:
             success = False
-            error_messages.append(m)
+            error_messages.append(f"Player {n+1}: {m}")
     if success:
         commit()
         return success, [f"All players signed up successfully for {tournament.name}"]
@@ -133,6 +133,9 @@ def tournament_signup(request, tournament_id):
 
 def runner_index(request):
     tournament_list = Tournament.objects.order_by('start_time')
+    department = request.GET.get("department")
+    if department:
+        tournament_list = tournament_list.filter(department=department)
     return render(request, 'inventory/tournament_runners.html', {'tournament_list': tournament_list})
 
 
