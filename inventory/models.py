@@ -65,4 +65,8 @@ class TournamentPlayer(models.Model):
 
 
 class TournamentTeam(models.Model):
-    pass
+    tournament = models.ForeignKey(Tournament, on_delete=models.DO_NOTHING)
+    players = models.ManyToManyField(TournamentPlayer)
+
+    def __str__(self):
+        return ", ".join([str(p) for p in self.players.all()])

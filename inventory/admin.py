@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 
-from .models import Item, Tournament, TournamentPlayer
+from .models import Item, Tournament, TournamentPlayer, TournamentTeam
 
 
 # Register your models here.
@@ -21,3 +21,4 @@ class TournamentPlayerAdmin(admin.ModelAdmin):
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Tournament, TournamentAdmin)
 admin.site.register(TournamentPlayer, TournamentPlayerAdmin)
+admin.site.register(TournamentTeam)

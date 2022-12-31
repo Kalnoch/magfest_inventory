@@ -6,8 +6,14 @@
 </head>
 <body>
 <div style="text-align: center; font-size: 30px;">The M-Points for this tournament are: {{ tournament.m_points }}</div>
-{% for player in players_list %}
-    <div style="text-align: center; font-size: 20px">{{ player }}</div>
-{% endfor %}
+{% if player_teams %}
+    {% for team in player_teams %}
+        <div style="text-align: center; font-size: 18px">Team {{ forloop.counter }} {{ team }}</div>
+    {% endfor %}
+{% else %}
+    {% for player in players_list %}
+        <div style="text-align: center; font-size: 20px">{{ player }}</div>
+    {% endfor %}
+{% endif %}
 </body>
 </html>
