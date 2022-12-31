@@ -17,7 +17,7 @@ class Tournaments:
                                                                      badge_number=r['result']['badge_num'])
 
             if player.tournament_set.filter(pk=tournament.pk):
-                return True, f"You are already signed up for {tournament.name}"
+                return False, f"You are already signed up for {tournament.name}"
             if not tournament.players.count() < tournament.max_players:
                 return False, f"Sorry {tournament.name} is full"
             if now() < tournament.open_time:

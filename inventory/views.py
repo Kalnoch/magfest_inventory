@@ -95,9 +95,15 @@ def tournament_detail(request, tournament_id):
 
 def tournament_team_signup(request, tournament, t):
     success = True
-    error_messages = []
+    error_messages = ["There was an error in signing up your team:"]
+    unique_barcodes = set()
     for n in range(tournament.team_size):
-        s, m = t.sign_up(tournament, request.POST[f"barcode{n}"])
+        unique_barcodes.add(request.POST[f"barcode{n}"])
+    if len(unique_barcodes) != tournament.team_size:
+        error_messages.append(f"There must be {tournament.team_size} unique players per team")
+        return False, error_messages
+    for barcode in unique_barcodes:
+        s, m = t.sign_up(tournament, barcode)
         if not s:
             success = False
             error_messages.append(f"Player {n+1}: {m}")
@@ -105,7 +111,6 @@ def tournament_team_signup(request, tournament, t):
         commit()
         return success, [f"All players signed up successfully for {tournament.name}"]
     rollback()
-    error_messages.insert(0, "There was an error in signing up your team:")
     return success, error_messages
 
 
@@ -117,14 +122,10 @@ def tournament_signup(request, tournament_id):
     #tournament_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now()).order_by('start_time')
     if tournament.team_size > 1:
         set_autocommit(False)
-        success, message_array = tournament_team_signup(request, tournament, t)
+        _, message_array = tournament_team_signup(request, tournament, t)
         set_autocommit(True)
     else:
-        success, message = t.sign_up(tournament, request.POST['barcode'])
-    if success:
-        return render(request, 'inventory/tournament_signup.html', {'tournament': tournament,
-                                                                    'error_message': message,
-                                                                    'error_message_array': message_array})
+        _, message = t.sign_up(tournament, request.POST['barcode'])
         # return render(request, 'inventory/tournaments_index.html', {'tournament_list': tournament_list})
     return render(request, 'inventory/tournament_signup.html', {'tournament': tournament,
                                                                 'error_message': message,
