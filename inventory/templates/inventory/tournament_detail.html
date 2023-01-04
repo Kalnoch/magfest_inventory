@@ -23,7 +23,7 @@
 {#</ul>#}
 {% if tournament.team_size > 1 %}
     <form action="/tournaments/{{tournament.id}}/signup" method="post">
-        {% csrf_token %]
+        {% csrf_token %}
         {% with ''|center:tournament.team_size as range %}
         {% for _ in range %}
         <div style="text-align: center; color: white; margin: 10px">

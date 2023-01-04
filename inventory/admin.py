@@ -10,8 +10,9 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 class TournamentAdmin(admin.ModelAdmin):
-    department = forms.ChoiceField(choices=(('A', 'Consoles'), ('B', 'Arcade')))
     list_display = ('name', 'department', 'max_players', 'start_time', 'open_time', 'm_points')
+    list_filter = ['department']
+    search_fields = ['name']
 
 
 class TournamentPlayerAdmin(admin.ModelAdmin):
