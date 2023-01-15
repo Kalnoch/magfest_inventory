@@ -13,8 +13,8 @@
     <a href="all">All</a>
 </div>
 <div style="background-color: white">
-<h1 style="text-align: center; font-size: 50px"> All Smash tournament signups open 2 hours before the tournament start time. </h1>
-<h1 style="text-align: center; font-size: 40px"> If you don't see the tournament you're looking for, it may not be open yet or is full.</h1>
+<h1 style="text-align: center; font-size: 50px"> All Smash Ultimate sign-ups are 2 hours before the tournament starts </h1>
+<h1 style="text-align: center; font-size: 40px"> If you don't see the tournament you're looking for, it may not be open for signup yet.</h1>
 </div>
 {% if tournament_list %}
     <table style="width:100%; background-color: white">
@@ -27,7 +27,11 @@
         </tr>
     {% for tournament in tournament_list %}
         <tr>
-            <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
+            {% if tournament.max_players == tournament.players.count %}
+                <td>{{ tournament.name }} - FULL</td>
+            {% else %}
+                <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
+            {% endif %}
             <td>{{ tournament.department }}</td>
             <td>{{ tournament.max_players }}</td>
             <td>{{ tournament.players.count }}</td>
