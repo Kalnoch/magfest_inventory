@@ -1,5 +1,5 @@
 from inventory.reggie_interface import ReggieInterface
-from inventory.models import TournamentPlayer
+from inventory.models import TournamentPlayer, TournamentTeam
 from django.utils.timezone import now
 
 
@@ -8,19 +8,55 @@ class Tournaments:
     def __init__(self):
         self.reggie = ReggieInterface()
 
-    def sign_up(self, tournament, barcode):
+    def get_create_tournament_player(self, barcode):
         # Takes a barcode and signs up the given player
         r = self.reggie.lookup_attendee_from_barcode(barcode)
+        player = None
         if r is not None:
-            player, created = TournamentPlayer.objects.get_or_create(first_name=r['result']['first_name'],
-                                                                     last_name=r['result']['last_name'],
-                                                                     badge_number=r['result']['badge_num'])
+            player, _ = TournamentPlayer.objects.get_or_create(first_name=r['result']['first_name'],
+                                                               last_name=r['result']['last_name'],
+                                                               badge_number=r['result']['badge_num'])
+        return player
 
-            if tournament.players.count() < tournament.max_players and now() > tournament.open_time:
-                tournament.players.add(player)
-                return True
-            else:
-                return False
+    def sign_up_player(self, tournament, player):
+        if player.tournament_set.filter(pk=tournament.pk):
+            return False, f"You are already signed up for {tournament.name}"
+        if not tournament.players.count() < tournament.max_players:
+            return False, f"Sorry {tournament.name} is full"
+        if now() < tournament.open_time:
+            return False, f"Sorry, {tournament.name} has already started"
+        existing_signups = player.tournament_set.filter(start_time=tournament.start_time)
+        if existing_signups:
+            return False, f"Sorry, you are already signed up for {existing_signups[0].name} at that time"
+        tournament.players.add(player)
+        return True, f"Successfully signed up for {tournament.name}"
+
+    def single_sign_up(self, tournament, barcode):
+        player = self.get_create_tournament_player(barcode)
+        if player:
+            return self.sign_up_player(tournament, player)
+        return False, f"Sorry, your badge didn't scan properly, please try again. If the problem persists, please go see registration"
+
+    def team_sign_up(self, tournament, barcodes):
+        success = True
+        message = []
+        players = []
+        for barcode in barcodes:
+            player = self.get_create_tournament_player(barcode)
+            if player:
+                players.append(player)
+                s, m = self.sign_up_player(tournament, player)
+                if not s:
+                    success = False
+                    message.append(f"{player.first_name} {player.last_name}: {m}")
+                continue
+            success = False
+            message.append("Sorry, your badge didn't scan properly, please try again. If the problem persists, please go see registration")
+        if success:
+            t = TournamentTeam.objects.create(tournament=tournament)
+            t.players.set(players)
+            t.save()
+        return success, message
 
     @staticmethod
     def remove_from_tournament(self, tournament, player):

@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
 {%  load static %}
-<body style="background-image: url('{%  static "inventory/images/Super_2022_Background.png" %}');">
+<body style="background-image: url('{%  static "inventory/images/ltc_background.png" %}');">
 <div class="breadcrumbs">
     <a href="/">Main Menu</a>->
     <a href="/tournaments">Tournaments</a>
@@ -21,6 +21,28 @@
 {#    <div>Max number of players: {{ tournament.max_players }}</div>#}
 {#    <div>Current number of players: <a href="player_list">{{ tournament.players.count }}</a></div>#}
 {#</ul>#}
+{% if tournament.team_size > 1 %}
+    <form action="/tournaments/{{tournament.id}}/signup" method="post">
+        {% csrf_token %}
+        {% with ''|center:tournament.team_size as range %}
+        {% for _ in range %}
+        <div style="text-align: center; color: white; margin: 10px">
+                <label for="barcode{{forloop.counter0}}">Player {{forloop.counter}}: </label>
+                {% if forloop.first %}
+                <input id="barcode{{forloop.counter0}}" type="text" name="barcode{{forloop.counter0}}" onkeypress="handleEnter(event, this, 'barcode{{forloop.counter}}')" autofocus="autofocus">
+                {% elif forloop.last %}
+                <input id="barcode{{forloop.counter0}}" type="text" name="barcode{{forloop.counter0}}">
+                {% else %}
+                <input id="barcode{{forloop.counter0}}" type="text" name="barcode{{forloop.counter0}}" onkeypress="handleEnter(event, this, 'barcode{{forloop.counter}}')">
+                {% endif %}
+        </div>
+        {% endfor %}
+        {% endwith %}
+        <div style="text-align: center; color: white; margin: 10px">
+            <input type="submit" value="Sign Us Up!">
+        </div>
+    </form>
+{% else %}
 <div style="text-align: center; color: white">
     <form action="/tournaments/{{tournament.id}}/signup" method="post">
         {% csrf_token %}
@@ -29,6 +51,18 @@
         <input type="submit" value="OK">
     </form>
 </div>
+{% endif %}
 
+<script>
+function handleEnter(event, element, nextid) {
+  if (event.key === "Enter" && nextid !== "") {
+    document.getElementById(nextid).focus();
+    event.preventDefault();
+    return false;
+  } else {
+    return true;
+  }
+};
+</script>
 </body>
 </html>

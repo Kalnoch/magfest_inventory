@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" http-equiv="refresh" content="3; url = /">
+    <meta charset="UTF-8" http-equiv="refresh" content="5; url = /">
     <title>Tournament Signup</title>
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
 {%  load static %}
-<body style="background-image: url('{%  static "inventory/images/Super_2022_Background.png" %}');">
+<body style="background-image: url('{%  static "inventory/images/ltc_background.png" %}');">
 <div class="breadcrumbs">
     <a href="/">Main Menu</a>->
     <a href="/tournaments">Tournaments</a>
@@ -14,5 +14,10 @@
     </div>
 <h1 style="text-align: center; color: white">{{ tournament.name }}</h1>
 {% if error_message %}<p style="text-align: center; font-size: 36px; color: white" ><strong>{{ error_message }}</strong></p>{% endif %}
+{% if error_message_array %}
+    {% for message in error_message_array %}
+        <p style="text-align: center; font-size: 36px; color: white" ><strong>{{ message }}</strong></p>
+    {% endfor %}
+{% endif %}
 </body>
 </html>

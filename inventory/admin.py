@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 
-from .models import Item, Tournament, TournamentPlayer
+from .models import Item, Tournament, TournamentPlayer, TournamentTeam
 
 
 # Register your models here.
@@ -10,8 +10,9 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 class TournamentAdmin(admin.ModelAdmin):
-    department = forms.ChoiceField(choices=(('A', 'Consoles'), ('B', 'Arcade')))
     list_display = ('name', 'department', 'max_players', 'start_time', 'open_time', 'm_points')
+    list_filter = ['department']
+    search_fields = ['name']
 
 
 class TournamentPlayerAdmin(admin.ModelAdmin):
@@ -21,3 +22,4 @@ class TournamentPlayerAdmin(admin.ModelAdmin):
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Tournament, TournamentAdmin)
 admin.site.register(TournamentPlayer, TournamentPlayerAdmin)
+admin.site.register(TournamentTeam)

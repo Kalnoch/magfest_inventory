@@ -22,12 +22,12 @@
 {% for tournament in tournament_list %}
     <tr>
         <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
-        <td>{{ tournament.department }}</td>
+        <td><a href="/runners/?department={{tournament.department}}">{{ tournament.department }}</td>
         <td>{{ tournament.max_players }}</td>
         <td>{{ tournament.players.count }}</td>
         <td>{{ tournament.start_time }}</td>
         <td>{{ tournament.open_time }}</td>
-        <td>{{ tournament.printed }}</td>
+        <td>{{ tournament.printed|yesno:"Yes,No" }}</td>
     </tr>
 {% endfor %}
 </table>

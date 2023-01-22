@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from django.template import loader
 from django.utils.timezone import now
 from django.db.models import F, Count
+from django.db.transaction import set_autocommit, commit, rollback
 from django.core.exceptions import ObjectDoesNotExist
 from random import choice
 from .tournaments import Tournaments
@@ -82,8 +83,10 @@ def tournament_index(request):
 
 # Maybe instead of hiding full tournaments, label them as full? Mark them red? :thinking_face:
 def open_tournament(request):
-    tournament_list = Tournament.objects.annotate(count=Count('players')).filter(open_time__lte=now(), start_time__gt=now(), printed=False).exclude(max_players=F('count')).order_by('start_time')
-    return render(request, 'inventory/tournaments_index.html', {'tournament_list': tournament_list})
+    tournament_list = Tournament.objects.annotate(count=Count('players')).filter(open_time__lte=now(), start_time__gt=now(), printed=False).exclude(info_only_tournament=True).order_by('start_time')
+    tournament_info_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now()).exclude(info_only_tournament=False).order_by('start_time')
+    return render(request, 'inventory/tournaments_index.html', {'tournament_list': tournament_list,
+                                                                'tournament_info_list': tournament_info_list})
 
 
 def tournament_detail(request, tournament_id):
@@ -91,40 +94,83 @@ def tournament_detail(request, tournament_id):
     return render(request, 'inventory/tournament_detail.html', {'tournament': tournament})
 
 
+def tournament_team_signup(request, tournament, t):
+    success = True
+    error_messages = ["There was an error in signing up your team:"]
+    barcodes = []
+    unique_barcodes = set()
+    for n in range(tournament.team_size):
+        barcode = request.POST[f"barcode{n}"]
+        barcodes.append(barcode)
+        unique_barcodes.add(barcode)
+    if len(unique_barcodes) != tournament.team_size:
+        error_messages.append(f"There must be {tournament.team_size} unique players per team")
+        return False, error_messages
+    success, messages = t.team_sign_up(tournament, barcodes)
+    error_messages.extend(messages)
+    if success:
+        commit()
+        return success, [f"All players signed up successfully for {tournament.name}"]
+    rollback()
+    return success, error_messages
+
+
 def tournament_signup(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
     t = Tournaments()
-    tournament_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now()).order_by('start_time')
-    if t.sign_up(tournament, request.POST['barcode']):
-        return render(request, 'inventory/tournament_signup.html', {'tournament': tournament,
-                                                                    'error_message': "You have successfully signed up"})
+    message = ""
+    message_array = []
+    #tournament_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now()).order_by('start_time')
+    if tournament.team_size > 1:
+        set_autocommit(False)
+        _, message_array = tournament_team_signup(request, tournament, t)
+        set_autocommit(True)
+    else:
+        _, message = t.single_sign_up(tournament, request.POST['barcode'])
         # return render(request, 'inventory/tournaments_index.html', {'tournament_list': tournament_list})
     return render(request, 'inventory/tournament_signup.html', {'tournament': tournament,
-                                                                'error_message': "Signup unsuccessful, sorry, it might be full"})
+                                                                'error_message': message,
+                                                                'error_message_array': message_array})
 
 
 def runner_index(request):
     tournament_list = Tournament.objects.order_by('start_time')
+    department = request.GET.get("department")
+    if department:
+        tournament_list = tournament_list.filter(department=department)
     return render(request, 'inventory/tournament_runners.html', {'tournament_list': tournament_list})
 
 
 def runner_detail(request, tournament_id):
+    player_teams = []
     tournament = get_object_or_404(Tournament, pk=tournament_id)
-    tournament.m_points = Tournaments.determine_m_points(Tournaments, tournament)
+    if not tournament.custom_m_points:
+        tournament.m_points = Tournaments.determine_m_points(Tournaments, tournament)
     player_list = tournament.players.all()
+    if tournament.team_size > 1:
+        player_teams = tournament.tournamentteam_set.all()
     return render(request, 'inventory/runner_detail.html', {'tournament': tournament,
-                                                            'players_list': player_list})
+                                                            'players_list': player_list,
+                                                            'player_teams': player_teams})
 
 
 def runner_print(request, tournament_id):
+    player_list = None
+    player_teams = []
     tournament = get_object_or_404(Tournament, pk=tournament_id)
-    tournament.m_points = Tournaments.determine_m_points(Tournaments, tournament)
+    if not tournament.custom_m_points:
+        tournament.m_points = Tournaments.determine_m_points(Tournaments, tournament)
     tournament.printed = True
     tournament.save()
-    player_list = list(tournament.players.all())
-    shuffle(player_list)
+    if tournament.team_size == 1:
+        player_list = list(tournament.players.all())
+        shuffle(player_list)
+    else:
+        player_teams = list(tournament.tournamentteam_set.all())
+        shuffle(player_teams)
     return render(request, 'inventory/runner_print.html', {'tournament': tournament,
-                                                           'players_list': player_list})
+                                                           'players_list': player_list,
+                                                           'player_teams': player_teams})
 
 
 def tournament_player_list(request, tournament_id):
