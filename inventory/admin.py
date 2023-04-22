@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import admin
 
+from .challonge import create_tournament, update_tournament
 from .models import Item, Tournament, TournamentPlayer, TournamentTeam
 
 
@@ -13,6 +14,16 @@ class TournamentAdmin(admin.ModelAdmin):
     list_display = ('name', 'department', 'max_players', 'start_time', 'open_time', 'm_points')
     list_filter = ['department']
     search_fields = ['name']
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+
+        if not change:
+            tournament = create_tournament(obj)
+            obj.challonge_id = tournament['id']
+            obj.save()
+        else:
+            update_tournament(obj)
 
 
 class TournamentPlayerAdmin(admin.ModelAdmin):

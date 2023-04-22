@@ -1,4 +1,3 @@
-import django
 from django.db import models
 
 import os
@@ -49,6 +48,7 @@ class Tournament(models.Model):
     team_size = models.IntegerField(default=1)  # How many players are on a team
     players = models.ManyToManyField('TournamentPlayer', blank=True)
     printed = models.BooleanField(default=False)  # Whether the tournament bracket has been printed
+    challonge_id = models.IntegerField(null=True, blank=True)
     # kind_of_bracket
 
     def __str__(self):
@@ -59,6 +59,7 @@ class TournamentPlayer(models.Model):
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
     badge_number = models.CharField(max_length=7)
+    challonge_ids = models.TextField(default="{}")
 
     def __str__(self):
         return " ".join([self.first_name, self.last_name])

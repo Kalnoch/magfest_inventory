@@ -1,6 +1,7 @@
-from inventory.reggie_interface import ReggieInterface
-from inventory.models import TournamentPlayer, TournamentTeam
 from django.utils.timezone import now
+from inventory.models import TournamentPlayer, TournamentTeam
+from inventory.reggie_interface import ReggieInterface
+from .challonge import signup_player
 
 
 class Tournaments:
@@ -29,6 +30,7 @@ class Tournaments:
         if existing_signups:
             return False, f"Sorry, you are already signed up for {existing_signups[0].name} at that time"
         tournament.players.add(player)
+        signup_player(tournament, player)
         return True, f"Successfully signed up for {tournament.name}"
 
     def single_sign_up(self, tournament, barcode):
