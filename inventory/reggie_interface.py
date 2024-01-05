@@ -1,5 +1,3 @@
-#~1xxJnQ is OKAYDUDE, badge 25, and ~ixKa5g is COOLDUDE, badge 26
-
 import json
 import requests
 from inventory_system.settings import UBER_AUTH_TOKEN
@@ -16,9 +14,9 @@ class ReggieInterface:
         # Test URL
         # self.BASE_URL = 'https://staging-reggie.magfest.org/jsonrpc/'
         # self.BASE_URL = 'https://staging-super.reggie.magfest.org/jsonrpc/'
-        self.BASE_URL = 'https://super.dev.magevent.net/uber/jsonrpc/'
+        # self.BASE_URL = 'https://super.dev.magevent.net/uber/jsonrpc/'
         # Prod URL
-        # self.BASE_URL = 'https://super2023.reggie.magfest.org/jsonrpc/'
+        self.BASE_URL = 'https://super2024.reg.magfest.org/jsonrpc/'
 
     def lookup_attendee_from_barcode(self, barcode):
         payload = json.dumps({"method": "barcode.lookup_attendee_from_barcode", "params": [barcode]})
