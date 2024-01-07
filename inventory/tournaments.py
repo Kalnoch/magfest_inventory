@@ -1,7 +1,7 @@
 from django.utils.timezone import now
 from inventory.models import TournamentPlayer, TournamentTeam
 from inventory.reggie_interface import ReggieInterface
-from .challonge import signup_player
+from .challonge import signup_player, remove_player
 
 
 class Tournaments:
@@ -19,10 +19,10 @@ class Tournaments:
                                                                badge_number=r['result']['badge_num'])
         return player
 
-    def sign_up_player(self, tournament, player):
+    def sign_up_player(self, tournament, player, team=False):
         if player.tournament_set.filter(pk=tournament.pk):
             return False, f"You are already signed up for {tournament.name}"
-        if not tournament.players.count() < tournament.max_players:
+        if not tournament.players.count() < tournament.max_players and not tournament.allow_waitlist:
             return False, f"Sorry {tournament.name} is full"
         if now() < tournament.open_time:
             return False, f"Sorry, {tournament.name} has already started"
@@ -30,7 +30,10 @@ class Tournaments:
         if existing_signups:
             return False, f"Sorry, you are already signed up for {existing_signups[0].name} at that time"
         tournament.players.add(player)
-        signup_player(tournament, player)
+        if not team:
+            signup_player(tournament, player)
+        if tournament.players.count() >= tournament.max_players and tournament.allow_waitlist:
+            return True, f"Successfully waitlisted for {tournament.name}"
         return True, f"Successfully signed up for {tournament.name}"
 
     def single_sign_up(self, tournament, barcode):
@@ -47,7 +50,7 @@ class Tournaments:
             player = self.get_create_tournament_player(barcode)
             if player:
                 players.append(player)
-                s, m = self.sign_up_player(tournament, player)
+                s, m = self.sign_up_player(tournament, player, team=True)
                 if not s:
                     success = False
                     message.append(f"{player.first_name} {player.last_name}: {m}")
@@ -64,6 +67,7 @@ class Tournaments:
     def remove_from_tournament(self, tournament, player):
         # Takes a given tournament and player and removes the player from the tournament
         # Does not throw any errors if the player is not in the tournament
+        remove_player(tournament, player)
         tournament.players.remove(player)
 
     @staticmethod

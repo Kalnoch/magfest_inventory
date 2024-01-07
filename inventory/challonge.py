@@ -39,6 +39,31 @@ def signup_player(tournament, player):
     player.save()
 
 
+def signup_team(tournament, players):
+    team_name = "/".join([player.first_name for player in players])
+    participant = challonge.participants.create(
+        tournament.challonge_id,
+        team_name,
+    )
+    for player in players:
+        challonge_ids = json.loads(player.challonge_ids)
+        challonge_ids[tournament.challonge_id] = participant['id']
+        player.challonge_ids = json.dumps(challonge_ids)
+        player.save()
+
+
 def check_in_player(tournament, player):
     player_id = json.loads(player.challonge_ids)[str(tournament.challonge_id)]
     challonge.participants.check_in(tournament.challonge_id, player_id)
+
+
+def remove_player(tournament, player):
+    tournament_id = str(tournament.challonge_id)
+    challonge_ids = json.loads(player.challonge_ids)
+    try:
+        challonge.participants.destroy(tournament_id, challonge_ids[tournament_id])
+    except:  # TODO: catch the HTTP 404 error correctly and handle
+        pass
+    challonge_ids.pop(tournament_id)
+    player.challonge_ids = json.dumps(challonge_ids)
+    player.save()

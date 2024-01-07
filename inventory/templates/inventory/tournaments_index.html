@@ -27,8 +27,10 @@
         </tr>
     {% for tournament in tournament_list %}
         <tr>
-            {% if tournament.max_players == tournament.players.count %}
+            {% if tournament.max_players == tournament.players.count and not tournament.allow_waitlist%}
                 <td>{{ tournament.name }} - FULL</td>
+            {% elif  tournament.max_players <= tournament.players.count and tournament.allow_waitlist %}
+                <td><a href="{{ tournament.id }}/">{{ tournament.name }} - WAITLIST</a></td>
             {% else %}
                 <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
             {% endif %}
