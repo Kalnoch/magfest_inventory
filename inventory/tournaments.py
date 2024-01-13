@@ -22,8 +22,11 @@ class Tournaments:
     def sign_up_player(self, tournament, player, team=False):
         if player.tournament_set.filter(pk=tournament.pk):
             return False, f"You are already signed up for {tournament.name}"
-        if not tournament.players.count() < tournament.max_players and not tournament.allow_waitlist:
-            return False, f"Sorry {tournament.name} is full"
+        if not tournament.allow_waitlist:
+            if not tournament.players.count() < tournament.max_players and not team:
+                return False, f"Sorry {tournament.name} is full"
+            if team and not tournament.tournamentteam_set.count() < tournament.max_players:
+                return False, f"Sorry {tournament.name} teams are full"
         if now() < tournament.open_time:
             return False, f"Sorry, {tournament.name} has already started"
         existing_signups = player.tournament_set.filter(start_time=tournament.start_time)
@@ -32,8 +35,10 @@ class Tournaments:
         tournament.players.add(player)
         if not team:
             signup_player(tournament, player)
-        if tournament.players.count() >= tournament.max_players and tournament.allow_waitlist:
-            return True, f"Successfully waitlisted for {tournament.name}"
+            if tournament.players.count() >= tournament.max_players and tournament.allow_waitlist:
+                return True, f"Successfully waitlisted for {tournament.name}"
+        if team and tournament.tournamentteam_set.count() >= tournament.max_players:
+            return True, f"Successfully waitlisted team member for {tournament.name}"
         return True, f"Successfully signed up for {tournament.name}"
 
     def single_sign_up(self, tournament, barcode):

@@ -19,8 +19,8 @@
     <table style="width:100%; background-color: white">
         <tr>
             <th>Tournament Name</th>
-            <th>Max Players</th>
-            <th>Current Players</th>
+            <th>Max Players/Teams</th>
+            <th>Current Players/Teams</th>
             <th>Start Time</th>
             <th>Open Time</th>
         </tr>
@@ -28,7 +28,11 @@
         <tr>
             <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
             <td>{{ tournament.max_players }}</td>
-            <td>{{ tournament.players.count }}</td>
+            {% if tournament.team_size != 1 %}
+                <td>{{ tournament.tournamentteam_set.count }}</td>
+            {% else %}
+                <td>{{ tournament.players.count }}</td>
+            {% endif %}
             <td>{{ tournament.start_time }}</td>
             <td>{{ tournament.open_time }}</td>
         </tr>

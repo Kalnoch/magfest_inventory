@@ -21,22 +21,36 @@
         <tr>
             <th>Tournament Name</th>
             <th>Department</th>
-            <th>Max Players</th>
-            <th>Current Players</th>
+            <th width="15%">Max Players/Teams</th>
+            <th width="15%">Current Players/Teams</th>
             <th>Start Time</th>
         </tr>
     {% for tournament in tournament_list %}
         <tr>
-            {% if tournament.max_players == tournament.players.count and not tournament.allow_waitlist%}
-                <td>{{ tournament.name }} - FULL</td>
-            {% elif  tournament.max_players <= tournament.players.count and tournament.allow_waitlist %}
-                <td><a href="{{ tournament.id }}/">{{ tournament.name }} - WAITLIST</a></td>
+            {% if tournament.team_size != 1 %}
+                {% if tournament.max_players <= tournament.tournamentteam_set.count and not tournament.allow_waitlist%}
+                    <td>{{ tournament.name }} - FULL</td>
+                {% elif  tournament.max_players <= tournament.tournamentteam_set.count and tournament.allow_waitlist %}
+                    <td><a href="{{ tournament.id }}/">{{ tournament.name }} - WAITLIST</a></td>
+                {% else %}
+                    <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
+                {% endif %}
             {% else %}
-                <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
+                {% if tournament.max_players <= tournament.players.count and not tournament.allow_waitlist%}
+                    <td>{{ tournament.name }} - FULL</td>
+                {% elif  tournament.max_players <= tournament.players.count and tournament.allow_waitlist %}
+                    <td><a href="{{ tournament.id }}/">{{ tournament.name }} - WAITLIST</a></td>
+                {% else %}
+                    <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
+                {% endif %}
             {% endif %}
             <td>{{ tournament.department }}</td>
             <td>{{ tournament.max_players }}</td>
-            <td>{{ tournament.players.count }}</td>
+            {% if tournament.team_size != 1 %}
+                <td>{{ tournament.tournamentteam_set.count }}</td>
+            {% else %}
+                <td>{{ tournament.players.count }}</td>
+            {% endif %}
             <td>{{ tournament.start_time }}</td>
         </tr>
     {% endfor %}

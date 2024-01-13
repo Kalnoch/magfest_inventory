@@ -83,7 +83,7 @@ def tournament_index(request):
 
 # Maybe instead of hiding full tournaments, label them as full? Mark them red? :thinking_face:
 def open_tournament(request):
-    tournament_list = Tournament.objects.annotate(count=Count('players')).filter(open_time__lte=now(), start_time__gt=now(), printed=False).exclude(info_only_tournament=True).order_by('start_time')
+    tournament_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now(), printed=False).exclude(info_only_tournament=True).order_by('start_time')
     tournament_info_list = Tournament.objects.filter(open_time__lte=now(), start_time__gt=now()).exclude(info_only_tournament=False).order_by('start_time')
     return render(request, 'inventory/tournaments_index.html', {'tournament_list': tournament_list,
                                                                 'tournament_info_list': tournament_info_list})
