@@ -20,13 +20,14 @@ class Tournaments:
         return player
 
     def sign_up_player(self, tournament, player, team=False):
+        tournament_soft_cap = tournament.max_players
+        tournament_hard_cap = tournament.max_players + tournament.waitlist_cap
         if player.tournament_set.filter(pk=tournament.pk):
             return False, f"You are already signed up for {tournament.name}"
-        if not tournament.allow_waitlist:
-            if not tournament.players.count() < tournament.max_players and not team:
-                return False, f"Sorry {tournament.name} is full"
-            if team and not tournament.tournamentteam_set.count() < tournament.max_players:
-                return False, f"Sorry {tournament.name} teams are full"
+        if tournament.players.count() >= tournament_hard_cap and not team:
+            return False, f"Sorry {tournament.name} is full"
+        if team and tournament.tournamentteam_set.count() >= tournament_hard_cap:
+            return False, f"Sorry {tournament.name} teams are full"
         if now() < tournament.open_time:
             return False, f"Sorry, {tournament.name} has already started"
         existing_signups = player.tournament_set.filter(start_time=tournament.start_time)
@@ -35,9 +36,9 @@ class Tournaments:
         tournament.players.add(player)
         if not team:
             signup_player(tournament, player)
-            if tournament.players.count() >= tournament.max_players and tournament.allow_waitlist:
+            if tournament.players.count() > tournament_soft_cap:
                 return True, f"Successfully waitlisted for {tournament.name}"
-        if team and tournament.tournamentteam_set.count() >= tournament.max_players:
+        if team and tournament.tournamentteam_set.count() > tournament_soft_cap:
             return True, f"Successfully waitlisted team member for {tournament.name}"
         return True, f"Successfully signed up for {tournament.name}"
 

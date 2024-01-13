@@ -50,7 +50,7 @@ class Tournament(models.Model):
     printed = models.BooleanField(default=False)  # Whether the tournament bracket has been printed
     challonge_id = models.IntegerField(null=True, blank=True)
     challonge_url = models.CharField(max_length=256, null=False, blank=True)
-    allow_waitlist = models.BooleanField(default=False)
+    waitlist_cap = models.IntegerField(default=0)
     # kind_of_bracket
 
     def __str__(self):

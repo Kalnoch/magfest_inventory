@@ -28,17 +28,17 @@
     {% for tournament in tournament_list %}
         <tr>
             {% if tournament.team_size != 1 %}
-                {% if tournament.max_players <= tournament.tournamentteam_set.count and not tournament.allow_waitlist%}
+                {% if tournament.tournamentteam_set.count >= tournament.max_players|add:tournament.waitlist_cap %}
                     <td>{{ tournament.name }} - FULL</td>
-                {% elif  tournament.max_players <= tournament.tournamentteam_set.count and tournament.allow_waitlist %}
+                {% elif  tournament.tournamentteam_set.count >= tournament.max_players and tournament.tournamentteam_set.count < tournament.max_players|add:tournament.waitlist_cap%}
                     <td><a href="{{ tournament.id }}/">{{ tournament.name }} - WAITLIST</a></td>
                 {% else %}
                     <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
                 {% endif %}
             {% else %}
-                {% if tournament.max_players <= tournament.players.count and not tournament.allow_waitlist%}
+                {% if tournament.players.count >= tournament.max_players|add:tournament.waitlist_cap %}
                     <td>{{ tournament.name }} - FULL</td>
-                {% elif  tournament.max_players <= tournament.players.count and tournament.allow_waitlist %}
+                {% elif  tournament.players.count >= tournament.max_players  and tournament.players.count < tournament.max_players|add:tournament.waitlist_cap %}
                     <td><a href="{{ tournament.id }}/">{{ tournament.name }} - WAITLIST</a></td>
                 {% else %}
                     <td><a href="{{ tournament.id }}/">{{ tournament.name }}</a></td>
