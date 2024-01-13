@@ -1,7 +1,7 @@
 from django.utils.timezone import now
 from inventory.models import TournamentPlayer, TournamentTeam
 from inventory.reggie_interface import ReggieInterface
-from .challonge import signup_team, signup_player, remove_player
+from .challonge import signup_team, signup_player, remove_player, remove_team
 
 
 class Tournaments:
@@ -58,10 +58,10 @@ class Tournaments:
             success = False
             message.append("Sorry, your badge didn't scan properly, please try again. If the problem persists, please go see registration")
         if success:
-            signup_team(tournament, players)
-            t = TournamentTeam.objects.create(tournament=tournament)
-            t.players.set(players)
-            t.save()
+            team = TournamentTeam.objects.create(tournament=tournament)
+            team.players.set(players)
+            team.save()
+            signup_team(tournament, team)
         return success, message
 
     @staticmethod
@@ -70,6 +70,15 @@ class Tournaments:
         # Does not throw any errors if the player is not in the tournament
         if tournament.team_size == 1:  # If team, don't want to force entire team to drop because of one person?
             remove_player(tournament, player)
+        else:
+            team = TournamentTeam.objects.get(tournament=tournament, players=player)
+            if team.players.count() == 1:
+                remove_team(tournament, team)
+                team.delete()
+            else:
+                team.players.remove(player)
+                team.save()
+
         tournament.players.remove(player)
 
     @staticmethod

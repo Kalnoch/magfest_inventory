@@ -70,6 +70,7 @@ class TournamentPlayer(models.Model):
 class TournamentTeam(models.Model):
     tournament = models.ForeignKey(Tournament, on_delete=models.DO_NOTHING)
     players = models.ManyToManyField(TournamentPlayer)
+    challonge_id = models.CharField(max_length=64, blank=True)
 
     def __str__(self):
         return ", ".join([str(p) for p in self.players.all()])

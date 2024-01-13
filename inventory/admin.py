@@ -21,6 +21,7 @@ class TournamentAdmin(admin.ModelAdmin):
         if not change:
             tournament = create_tournament(obj)
             obj.challonge_id = tournament['id']
+            obj.challonge_url = f"https://challonge.com/{tournament['url']}"
             obj.save()
         else:
             update_tournament(obj)

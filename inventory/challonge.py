@@ -39,17 +39,15 @@ def signup_player(tournament, player):
     player.save()
 
 
-def signup_team(tournament, players):
+def signup_team(tournament, team):
+    players = team.players.all()
     team_name = "/".join([player.first_name for player in players])
     participant = challonge.participants.create(
         tournament.challonge_id,
         team_name,
     )
-    for player in players:
-        challonge_ids = json.loads(player.challonge_ids)
-        challonge_ids[tournament.challonge_id] = participant['id']
-        player.challonge_ids = json.dumps(challonge_ids)
-        player.save()
+    team.challonge_id = participant['id']
+    team.save()
 
 
 def check_in_player(tournament, player):
@@ -67,3 +65,12 @@ def remove_player(tournament, player):
     challonge_ids.pop(tournament_id)
     player.challonge_ids = json.dumps(challonge_ids)
     player.save()
+
+
+def remove_team(tournament, team):
+    tournament_id = str(tournament.challonge_id)
+    try:
+        challonge.participants.destroy(tournament_id, team.challonge_id)
+    except:
+        pass
+
