@@ -18,6 +18,7 @@
         <th>Start Time</th>
         <th>Open Time</th>
         <th>Printed?</th>
+        <th>Challonge URL</th>
     </tr>
 {% for tournament in tournament_list %}
     <tr>
@@ -28,6 +29,7 @@
         <td>{{ tournament.start_time }}</td>
         <td>{{ tournament.open_time }}</td>
         <td>{{ tournament.printed|yesno:"Yes,No" }}</td>
+        <td><a href="{{ tournament.challonge_url }}" target="_blank">{{ tournament.challonge_url }}</a></td>
     </tr>
 {% endfor %}
 </table>
