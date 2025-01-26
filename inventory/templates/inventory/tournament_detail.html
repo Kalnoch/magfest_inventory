@@ -12,8 +12,8 @@
     <a href="/tournaments">Tournaments</a>
     -> {{ tournament.name }}
 </div>
-<h1 style="text-align: center; color: white">{{ tournament.name }}</h1>
-<h2 style="text-align: center; color: white;"> Please scan badge now </h2>
+<h1 style="text-align: center; color: black">{{ tournament.name }}</h1>
+<h2 style="text-align: center; color: black;"> Please scan badge now </h2>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
@@ -26,7 +26,7 @@
         {% csrf_token %}
         {% with ''|center:tournament.team_size as range %}
         {% for _ in range %}
-        <div style="text-align: center; color: white; margin: 10px">
+        <div style="text-align: center; color: black; margin: 10px">
                 <label for="barcode{{forloop.counter0}}">Player {{forloop.counter}}: </label>
                 {% if forloop.first %}
                 <input id="barcode{{forloop.counter0}}" type="text" name="barcode{{forloop.counter0}}" onkeypress="handleEnter(event, this, 'barcode{{forloop.counter}}')" autofocus="autofocus">
@@ -38,12 +38,12 @@
         </div>
         {% endfor %}
         {% endwith %}
-        <div style="text-align: center; color: white; margin: 10px">
+        <div style="text-align: center; color: black; margin: 10px">
             <input type="submit" value="Sign Us Up!">
         </div>
     </form>
 {% else %}
-<div style="text-align: center; color: white">
+<div style="text-align: center; color: black">
     <form action="/tournaments/{{tournament.id}}/signup" method="post">
         {% csrf_token %}
         <label for="barcode">Barcode: </label>

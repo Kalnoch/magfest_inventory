@@ -146,17 +146,20 @@ def runner_detail(request, tournament_id):
     tournament = get_object_or_404(Tournament, pk=tournament_id)
     if not tournament.custom_m_points:
         tournament.m_points = Tournaments.determine_m_points(Tournaments, tournament)
-    player_list = tournament.players.all()
+    player_list = tournament.players.all()[:tournament.max_players]
+    waitlist = tournament.players.all()[tournament.max_players:]
     if tournament.team_size > 1:
         player_teams = tournament.tournamentteam_set.all()
     return render(request, 'inventory/runner_detail.html', {'tournament': tournament,
                                                             'players_list': player_list,
-                                                            'player_teams': player_teams})
+                                                            'player_teams': player_teams,
+                                                            'waitlist': waitlist})
 
 
 def runner_print(request, tournament_id):
     player_list = None
     player_teams = []
+    waitlist = None
     tournament = get_object_or_404(Tournament, pk=tournament_id)
     if not tournament.custom_m_points:
         tournament.m_points = Tournaments.determine_m_points(Tournaments, tournament)
@@ -164,13 +167,16 @@ def runner_print(request, tournament_id):
     tournament.save()
     if tournament.team_size == 1:
         player_list = list(tournament.players.all())
+        player_list = list(tournament.players.all()[:tournament.max_players])
         shuffle(player_list)
+        waitlist = tournament.players.all()[tournament.max_players:]
     else:
         player_teams = list(tournament.tournamentteam_set.all())
         shuffle(player_teams)
     return render(request, 'inventory/runner_print.html', {'tournament': tournament,
                                                            'players_list': player_list,
-                                                           'player_teams': player_teams})
+                                                           'player_teams': player_teams,
+                                                           'waitlist': waitlist})
 
 
 def tournament_player_list(request, tournament_id):

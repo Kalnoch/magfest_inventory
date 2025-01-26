@@ -3,6 +3,6 @@ chardet==3.0.4
 Django==4.1.4
 idna==2.8
 pychallonge==1.11.5
-requests==2.22.0
+requests==2.25.1
 sqlparse==0.3.0
 urllib3==1.25.8

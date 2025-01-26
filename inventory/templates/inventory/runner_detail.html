@@ -25,6 +25,12 @@
     {% for player in players_list %}
         <div style="text-align: center; font-size: 18px">{{ player }}</div>
     {% endfor %}
+    {% if waitlist %}
+        <h2 style="text-align: center"> Waitlist: </h2>
+        {% for player in waitlist %}
+            <div style="text-align: center; font-size: 18px">{{ player }}</div>
+        {% endfor %}
+    {% endif %}
 {% else %}
     <p>No players currently signed up for this tournament.</p>
 {% endif %}

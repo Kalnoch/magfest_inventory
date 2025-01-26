@@ -12,11 +12,11 @@
     <a href="/tournaments">Tournaments</a>
     -> {{ tournament.name }}
     </div>
-<h1 style="text-align: center; color: white">{{ tournament.name }}</h1>
-{% if error_message %}<p style="text-align: center; font-size: 36px; color: white" ><strong>{{ error_message }}</strong></p>{% endif %}
+<h1 style="text-align: center; color: black">{{ tournament.name }}</h1>
+{% if error_message %}<p style="text-align: center; font-size: 36px; color: black" ><strong>{{ error_message }}</strong></p>{% endif %}
 {% if error_message_array %}
     {% for message in error_message_array %}
-        <p style="text-align: center; font-size: 36px; color: white" ><strong>{{ message }}</strong></p>
+        <p style="text-align: center; font-size: 36px; color: black" ><strong>{{ message }}</strong></p>
     {% endfor %}
 {% endif %}
 </body>
