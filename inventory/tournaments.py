@@ -29,7 +29,7 @@ class Tournaments:
         if team and tournament.tournamentteam_set.count() >= tournament_hard_cap:
             return False, f"Sorry {tournament.name} teams are full"
         if now() < tournament.open_time:
-            return False, f"Sorry, {tournament.name} has already started"
+            return False, f"Sorry, {tournament.name} is not open for signup yet"
         existing_signups = player.tournament_set.filter(start_time=tournament.start_time)
         if existing_signups:
             return False, f"Sorry, you are already signed up for {existing_signups[0].name} at that time"
@@ -138,17 +138,19 @@ class Tournaments:
                          40: smash_pay_3
                          }
         p_count = tournament.players.count()
-        if tournament.name.startswith("Smash"):
-            if p_count > 40:
+        if tournament.name.startswith("Smash") or tournament.name.startswith("Super Smash"):
+            if p_count > 40 and tournament.max_players > 40:
                 return smash_pay_3
-            elif p_count > 24:
+            elif p_count > 24 and tournament.max_players > 24:
                 return smash_pay_2
-            elif p_count > 8:
+            elif p_count > 8 and tournament.max_players > 8:
                 return smash_pay_1
             else:
                 return 0
         else:
-            if p_count in m_point_bracket:
+            if tournament.max_players in m_point_bracket:
+                if p_count > tournament.max_players:
+                    p_count = tournament.max_players
                 m_points = m_point_bracket[p_count]
                 return m_points
             else:

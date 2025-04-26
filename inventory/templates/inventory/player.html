@@ -6,14 +6,14 @@
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
 {%  load static %}
-<body style="background-image: url('{%  static "inventory/images/ltc_background.png" %}');">
+<body style="background-image: url('{%  static "inventory/images/ltc_background.png" %}'); background-size: 100%;">
 <div class="breadcrumbs">
     <a href="/">Main Menu</a>
     </div>
 
-<h1 style="text-align: center; color: white"> Please scan badge now </h1>
+<h1 style="text-align: center; color: black"> Please scan badge now </h1>
 
-<div style="text-align: center; color: white">
+<div style="text-align: center; color: black">
     <form action="/player_detail" method="post">
         {% csrf_token %}
         <label for="barcode">Barcode: </label>

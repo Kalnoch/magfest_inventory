@@ -17,6 +17,7 @@ class ReggieInterface:
         self.BASE_URL = 'https://super.dev.magevent.net/jsonrpc/'
         # Prod URL
         # self.BASE_URL = 'https://super2024.reg.magfest.org/jsonrpc/'
+        # self.BASE_URL = 'https://super2025.reg.magfest.org/jsonrpc/'
 
     def lookup_attendee_from_barcode(self, barcode):
         payload = json.dumps({"method": "barcode.lookup_attendee_from_barcode", "params": [barcode]})

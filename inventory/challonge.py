@@ -9,7 +9,7 @@ challonge.set_credentials('Kalnoch', CHALLONGE_AUTH_TOKEN)
 def create_tournament(tournament):
     return challonge.tournaments.create(
         tournament.name,
-        f"mag2024_{tournament.id}",
+        f"mag2025_{tournament.id}",
         organization_id=161390,
         open_signup=False,
         private=True,

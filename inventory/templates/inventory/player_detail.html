@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
 </head>
 {%  load static %}
-<body style="background-image: url('{%  static "inventory/images/ltc_background.png" %}');">
+<body style="background-image: url('{%  static "inventory/images/ltc_background.png" %}'); background-size: 100%;">
 <div class="breadcrumbs">
     <a href="/">Main Menu</a>
     -> {{ player.first_name }}
@@ -40,7 +40,7 @@
     {% endfor %}
     </table>
 {% else %}
-    <h1 style="font-size:25pt; text-align: center; color: white">You are not signed up for any tournaments.</h1>
+    <h1 style="font-size:25pt; text-align: center; color: black">You are not signed up for any tournaments.</h1>
 {% endif %}
 </body>
 </html>

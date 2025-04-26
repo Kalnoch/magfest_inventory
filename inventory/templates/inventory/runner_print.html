@@ -23,6 +23,18 @@
             <td>{{ player.badge_number }}</td>
         </tr>
     {% endfor %}
+    {% if waitlist %}
+        <tr>
+            <td> WAITLIST: </td>
+            <td> ----- </td>
+        </tr>
+        {% for player in waitlist %}
+            <tr>
+                <td>{{ player }}</td>
+                <td>{{ player.badge_number }}</td>
+            </tr>
+        {% endfor %}
+    {% endif %}
     </table>
 {% endif %}
 </body>
