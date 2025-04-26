@@ -1,9 +1,10 @@
 import requests
+from inventory_system.settings import BASEROW_AUTH_TOKEN
 
 
 BASE_URL = "https://baserow.magfest.net/api"
 HEADERS = {
-    "Authorization": "Token xwTaRGpXhWVF3HOUVmQ8Yk2jruknthC5",
+    "Authorization": BASEROW_AUTH_TOKEN,
     "Accept": "application/json",
     "Content-Type": "application/json",
 }
