@@ -16,6 +16,7 @@ class Tournaments:
         if r is not None:
             player, _ = TournamentPlayer.objects.get_or_create(first_name=r['result']['first_name'],
                                                                last_name=r['result']['last_name'],
+                                                               badge_printed_name=r['result']['badge_printed_name'],
                                                                badge_number=r['result']['badge_num'])
         return player
 

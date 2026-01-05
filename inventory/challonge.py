@@ -29,9 +29,13 @@ def update_tournament(tournament, **kwargs):
 
 
 def signup_player(tournament, player):
+    if player.badge_printed_name:
+        name = player.badge_printed_name
+    else:
+        name = " ".join([player.first_name, player.last_name])
     participant = challonge.participants.create(
         tournament.challonge_id,
-        " ".join([player.first_name, player.last_name]),
+        name,
     )
     challonge_ids = json.loads(player.challonge_ids)
     challonge_ids[tournament.challonge_id] = participant['id']
