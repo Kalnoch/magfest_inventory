@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from random import choice
 from .tournaments import Tournaments
 
-from .models import Item, Tournament, TournamentPlayer
+from .models import Item, Tournament, TournamentPlayer, Game
 from inventory.reggie_interface import ReggieInterface
 
 from random import shuffle
@@ -220,3 +220,13 @@ def remove_player_from_tournament(request):
     tournament_list = Tournament.objects.filter(players__id=player.id)
     return render(request, 'inventory/player_detail.html', {'player': player,
                                                             'tournament_list': tournament_list})
+
+
+def game_index(request):
+    game_list = Game.objects.order_by('name')
+    console = request.GET.get("console")
+    if console:
+        game_list = game_list.filter(console=console)
+    template = loader.get_template('inventory/games_index.html')
+    context = {'game_list': game_list}
+    return HttpResponse(template.render(context, request))

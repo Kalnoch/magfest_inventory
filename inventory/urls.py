@@ -20,6 +20,7 @@ urlpatterns = [
     path('runners/<int:tournament_id>/print', views.runner_print),
     path('runners/<int:tournament_id>/player_list/', views.tournament_player_list, name='tournament players'),
     path('runners/<int:tournament_id>/player_list/shuffle', views.tournament_player_list_shuffled, name='shuffled tournament players'),
+    path('games/', views.game_index, name='games'),
 ]
 
 

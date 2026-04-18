@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Games Index</title>
+    <link rel="stylesheet" type="text/css" href="/static/inventory/css/minimal.css">
+</head>
+{%  load static %}
+<body style="background-image: url('{%  static "inventory/images/ltc_background.png" %}'); background-size: 100%;">
+<div class="breadcrumbs">
+    <a href="/games"> All Games </a>
+</div>
+    <table style="width:100%; background-color: white">
+        <tr>
+            <th>Game</th>
+            <th>Console</th>
+        </tr>
+    {% for game in game_list %}
+        <tr>
+            <td>{{ game.name }}</td>
+            <td><a href="/games/?console={{game.console}}">{{ game.console }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+</body>
+</html>

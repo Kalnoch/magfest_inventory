@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib import admin
 
+from .baserow import list_rows
 from .challonge import create_tournament, update_tournament
-from .models import Item, Tournament, TournamentPlayer, TournamentTeam
+from .models import Item, Tournament, TournamentPlayer, TournamentTeam, Game
 
 
 # Register your models here.
@@ -31,7 +32,23 @@ class TournamentPlayerAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'badge_number')
 
 
+def sync_baserow(modeladmin, request, queryset):
+    modeladmin.model.objects.all().delete()
+    fields = modeladmin.get_fields(request)
+    baserow_rows = list_rows(modeladmin.baserow_table_id)
+    for item in baserow_rows.values():
+        field_dict = {field: item[field] for field in fields}
+        modeladmin.model.objects.create(**field_dict)
+
+
+class GameAdmin(admin.ModelAdmin):
+    baserow_table_id = 1369
+    list_display = ('name', 'console')
+    actions = [sync_baserow]
+
+
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Tournament, TournamentAdmin)
 admin.site.register(TournamentPlayer, TournamentPlayerAdmin)
 admin.site.register(TournamentTeam)
+admin.site.register(Game, GameAdmin)

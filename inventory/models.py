@@ -17,16 +17,55 @@ class Item(models.Model):
     resolution = models.CharField(max_length=128, blank=True)  # Mostly for TVs
 
 
+# for not games:
+# borked or not
+# location
+
+# for games:
+# checked out
+# checked out to?
+# borked or not
+# name
+# console
+
+
 class Console(models.Model):
-    pass
+    barcode = models.CharField(max_length=64)
+    name = models.CharField(max_length=64)
+    location = models.CharField(max_length=128)
 
 
 class Game(models.Model):
-    pass
+    barcode = models.CharField(max_length=64, blank=True, default='')
+    name = models.CharField(max_length=64)
+    console = models.CharField(max_length=64)
+    location = models.CharField(max_length=128, blank=True, default='')
+    checked_out = models.CharField(max_length=32, blank=True, default='')
+
+    def __str__(self):
+        return self.name
 
 
 class Peripheral(models.Model):
-    pass
+    barcode = models.CharField(max_length=64)
+    name = models.CharField(max_length=64)
+    location = models.CharField(max_length=128)
+    checked_out = models.CharField(max_length=32)
+
+
+class TV(models.Model):
+    barcode = models.CharField(max_length=64)
+    name = models.CharField(max_length=64)
+    type = models.CharField(max_length=8)  # CRT, LCD, etc
+    location = models.CharField(max_length=128)
+    input_type = models.CharField(max_length=32)
+    size = models.CharField(max_length=32)
+
+
+class AV(models.Model):
+    barcode = models.CharField(max_length=64)
+    name = models.CharField(max_length=64)
+    location = models.CharField(max_length=128)
 
 
 class Tournament(models.Model):
@@ -38,7 +77,7 @@ class Tournament(models.Model):
         ("Large Tournament Collider", "LTC"),
     ]
     name = models.CharField(max_length=64)  # Name of tournament
-    department = models.CharField(max_length=64, choices=DEPT_CHOICES) # Department running tournament
+    department = models.CharField(max_length=64, choices=DEPT_CHOICES)  # Department running tournament
     max_players = models.IntegerField()  # Max number of players in the tournament
     start_time = models.DateTimeField()  # When the tournament starts
     open_time = models.DateTimeField()  # When signup opens for the tournament
