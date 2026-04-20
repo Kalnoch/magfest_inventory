@@ -1,6 +1,6 @@
 certifi==2019.11.28
 chardet==3.0.4
-Django==4.1.4
+Django==4.1.7
 idna==2.8
 pychallonge==1.11.5
 requests==2.25.1
